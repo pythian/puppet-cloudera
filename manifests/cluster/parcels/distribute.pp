@@ -14,8 +14,15 @@ define cloudera::cluster::parcels::distribute (
     cwd     => "/tmp",
     creates => "$cdh_metadata_dir/parcels-distribute-$parcels_product.json.output",
     tries   => 3,
-    try_sleep => 60
+    try_sleep => 60,
+    notify => Exec["wait-distribution-complete-$parcels_product"]
   }
 
+  exec { "wait-distribution-complete-$parcels_product":
+    command => "/usr/bin/curl -u $cloudera::params::cm_api_user:$cloudera::params::cm_api_password -XGET \"http://$cm_api_host:$cm_api_port/api/v13/clusters/$cdh_cluster_name/parcels/products/$parcels_product/versions/$parcels_version\" | grep DISTRIBUTED",
+    tries => 20,
+    try_sleep => 60,
+    refreshonly => true,
+  }
 }
 

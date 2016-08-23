@@ -27,6 +27,8 @@ class cloudera::cluster::create (
   $file_ensure       = $cloudera::params::file_ensure,
   $cdh_metadata_dir  = $cloudera::params::cdh_metadata_dir,
   $cdh_cluster_name  = $cloudera::params::cdh_cluster_name,
+  $cdh_cluster_version  = $cloudera::params::cdh_cluster_version,
+  $cdh_full_version  = $cloudera::params::cdh_full_version,
   $cm_api_host       = $cloudera::params::cm_api_host,
   $cm_api_port       = $cloudera::params::cm_api_port,
   $cm_api_user       = $cloudera::params::cm_api_user,
@@ -41,7 +43,7 @@ class cloudera::cluster::create (
   }
 
   exec { 'create_cluster':
-    command => "/usr/bin/curl -H 'Content-Type: application/json' -u $cloudera::params::cm_api_user:$cloudera::params::cm_api_password -XPOST \"http://$cm_api_host:$cm_api_port/api/v1/clusters\" -d @cluster.json > $cdh_metadata_dir/cluster.json.output",
+    command => "/usr/bin/curl -H 'Content-Type: application/json' -u $cloudera::params::cm_api_user:$cloudera::params::cm_api_password -XPOST \"http://$cm_api_host:$cm_api_port/api/v13/clusters\" -d @cluster.json > $cdh_metadata_dir/cluster.json.output",
     cwd     => "/tmp",
     creates => "$cdh_metadata_dir/cluster.json.output",
     require => File['cluster.json'],

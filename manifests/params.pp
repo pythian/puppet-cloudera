@@ -312,9 +312,20 @@ class cloudera::params {
     undef => '/var/tmp/.clouderacluster',
     default => $::cloudera_cdh_metadata_dir,
   }
+
   $cdh_cluster_name = $::cloudera_cdh_cluster_name ? {
     undef => 'Cluster',
     default => $::cloudera_cdh_cluster_name,
+  }
+
+  $cdh_full_version = $::cloudera_cdh_full_version ? {
+    undef => '5.7.10',
+    default => $::cloudera_cdh_full_version,
+  }
+
+  $cdh_cluster_version = $::cloudera_cdh_cluster_version ? {
+    undef => 'CDH5',
+    default => $::cloudera_cdh_cluster_version,
   }
 
   $cm_api_host = $::cloudera_api_host ? {

@@ -7,6 +7,7 @@ class cloudera::cluster::roles::datanode (
   $cm_api_port       = $cloudera::params::cm_api_port,
   $cm_api_user       = $cloudera::params::cm_api_user,
   $cm_api_password   = $cloudera::params::cm_api_password,
+  $items_config      = $cloudera::params::items_config
 ) inherits cloudera::params {
 
   class { '::cloudera':
@@ -32,5 +33,11 @@ class cloudera::cluster::roles::datanode (
     cdh_service_roles => $cdh_service_roles,
     cm_api_host => $cm_api_host,
     require => Class['::cloudera::cluster::addhost'],
+  }
+  cloudera::cluster::configservice{'YARN':
+    cdh_cluster_name => $cdh_cluster_name,
+    items_config => $items_config,
+    cm_api_host => $cm_api_host,
+    require => Class['cloudera::cluster::addservice[YARN]']
   }
 }

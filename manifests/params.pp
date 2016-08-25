@@ -328,23 +328,53 @@ class cloudera::params {
     default => $::cloudera_cdh_cluster_version,
   }
 
-  $cm_api_host = $::cloudera_api_host ? {
+  $cm_api_host = $::cloudera_cm_api_host ? {
     undef => '127.0.0.1',
-    default => $::cloudera_api_host,
+    default => $::cloudera_cm_api_host,
   }
 
-  $cm_api_port = $::cloudera_api_port ? {
+  $cm_api_port = $::cloudera_cm_api_port ? {
     undef => 7180,
-    default => $::cloudera_api_port,
+    default => $::cloudera_cm_api_port,
   }
 
-  $cm_api_user = $::cloudera_api_user ? {
+  $cm_api_user = $::cloudera_cm_api_user ? {
     undef => 'admin',
-    default => $::cloudera_api_user,
+    default => $::cloudera_cm_api_user,
   }
 
-  $cm_api_password = $::cloudera_api_password ? {
+  $cm_api_password = $::cloudera_cm_api_password ? {
     undef => 'admin',
-    default => $::cloudera_api_password,
+    default => $::cloudera_cm_api_password,
+  }
+
+  $cm_db_remote = $::cloudera_cm_db_remote ? {
+    undef => 0,
+    default => $::cloudera_cm_db_remote,
+  }
+
+  $cm_db_type = $::cloudera_cm_db_type ? {
+    undef => 'postgresql',
+    default => $::cloudera_cm_db_type,
+  }
+
+  $cm_db_host = $::cloudera_cm_db_host ? {
+    undef => '127.0.0.1',
+    default => $::cloudera_cm_db_host,
+  }
+
+  $cm_db_port = $::cloudera_cm_db_port ? {
+    undef => 5432,
+    default => $::cloudera_cm_db_port,
+  }
+
+  $cm_db_user = $::cloudera_cm_db_user ? {
+    undef => 'postgres',
+    default => $::cloudera_cm_db_user,
+  }
+
+  $cm_db_pass = $::cloudera_cm_db_pass ? {
+    undef => undef,
+    default => $::cloudera_cm_db_pass,
   }
 }

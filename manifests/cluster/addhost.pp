@@ -36,7 +36,7 @@ class cloudera::cluster::addhost (
   exec { 'wait-host-registration':
     command => "/usr/bin/curl -u $cloudera::params::cm_api_user:$cloudera::params::cm_api_password -XGET \"http://$cm_api_host:$cm_api_port/api/v13/hosts\" | grep $fqdn",
     tries => 6,
-    try_sleep => 5
+    try_sleep => 10
   }
 
   file { 'host.json':

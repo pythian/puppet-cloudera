@@ -20,8 +20,8 @@ define cloudera::cluster::parcels::distribute (
 
   exec { "wait-distribution-complete-$parcels_product":
     command => "/usr/bin/curl -u $cloudera::params::cm_api_user:$cloudera::params::cm_api_password -XGET \"http://$cm_api_host:$cm_api_port/api/v13/clusters/$cdh_cluster_name/parcels/products/$parcels_product/versions/$parcels_version\" | grep DISTRIBUTED",
-    tries => 20,
-    try_sleep => 60,
+    tries => 10,
+    try_sleep => 180,
     refreshonly => true,
   }
 }

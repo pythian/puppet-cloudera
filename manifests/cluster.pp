@@ -12,7 +12,7 @@ class cloudera::cluster (
   if $install_cmserver == true {
     class { '::cloudera':
       cm_server_host => $cm_api_host,
-      install_cmserver = $install_cmserver,
+      install_cmserver => $install_cmserver,
       use_parcels => true
     }
 

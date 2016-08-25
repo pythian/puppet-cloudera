@@ -53,14 +53,14 @@ class cloudera::cluster::roles::server (
     require => Class['::cloudera::cluster']
   }
   class { '::cloudera::cluster::addhost':
-    cdh_cluster_name => '$1',
-    cm_api_host => '$2',
+    cdh_cluster_name => $cdh_cluster_name,
+    cm_api_host => $cm_api_host,
     require => Class['::cloudera::cluster::create']
   }
   cloudera::cluster::addservice{'ZOOKEEPER':
-    cdh_cluster_name => '$1',
+    cdh_cluster_name => $cdh_cluster_name,
     cdh_service_roles => ['SERVER'],
-    cm_api_host => '$2',
+    cm_api_host => $cm_api_host,
     require => Class['::cloudera::cluster::addhost'],
   }
 }

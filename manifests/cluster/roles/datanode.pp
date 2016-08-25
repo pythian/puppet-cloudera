@@ -27,4 +27,10 @@ class cloudera::cluster::roles::datanode (
     cm_api_host => $cm_api_host,
     require => Class['::cloudera::cluster::addhost'],
   }
+  cloudera::cluster::addservice{'YARN':
+    cdh_cluster_name => $cdh_cluster_name,
+    cdh_service_roles => $cdh_service_roles,
+    cm_api_host => $cm_api_host,
+    require => Class['::cloudera::cluster::addhost'],
+  }
 }

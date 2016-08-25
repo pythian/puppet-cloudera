@@ -25,6 +25,6 @@ class cloudera::cluster (
   class { '::cloudera::cluster::addhost':
     cdh_cluster_name => $cdh_cluster_name,
     cm_api_host => $cm_api_host,
-    require => Class['::cloudera::cluster']
+    require => Class['::cloudera']
   }
 }

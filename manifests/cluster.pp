@@ -22,9 +22,6 @@ class cloudera::cluster (
       use_parcels => true
     }
   }
-  class { '::cloudera::cluster':
-    require => Class['::cloudera']
-  }
   class { '::cloudera::cluster::addhost':
     cdh_cluster_name => $cdh_cluster_name,
     cm_api_host => $cm_api_host,

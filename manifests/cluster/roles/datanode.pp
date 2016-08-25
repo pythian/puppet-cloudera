@@ -19,7 +19,7 @@ class cloudera::cluster::roles::datanode (
   class { '::cloudera::cluster::addhost':
     cdh_cluster_name => $cdh_cluster_name,
     cm_api_host => $cm_api_host,
-    require => Class['::cloudera::cluster::create']
+    require => Class['::cloudera::cluster']
   }
   cloudera::cluster::addservice{'HDFS':
     cdh_cluster_name => $cdh_cluster_name,

@@ -35,12 +35,22 @@ class cloudera::cluster::roles::server (
     }
   }
 
-  class { '::cloudera::cluster': }
+  class { '::cloudera::cluster':
+    require => Class['::cloudera']
+  }
 
   class { '::cloudera::cluster::managementservice':
     cm_api_host => $cm_api_host,
     cdh_service_roles => ['ACTIVITYMONITOR','ALERTPUBLISHER','EVENTSERVER','HOSTMONITOR','SERVICEMONITOR'],
-    require => Class['::cloudera']
+    require => Class['::cloudera::cluster']
+  }
+
+  class { '::cloudera::cluster::create':
+    cdh_cluster_name => $cdh_cluster_name,
+    cm_api_host => $cm_api_host,
+    cdh_cluster_version => $cdh_cluster_version,
+    cdh_full_version => $cdh_full_version,
+    require => Class['::cloudera::cluster']
   }
 
 }

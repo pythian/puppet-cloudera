@@ -33,6 +33,12 @@ class cloudera::cluster::addhost (
   $cm_api_password   = $cloudera::params::cm_api_password
 ) inherits cloudera::params {
 
+  exec { 'wait-host-registration':
+    command => "/usr/bin/curl -u $cloudera::params::cm_api_user:$cloudera::params::cm_api_password -XGET \"http://$cm_api_host:$cm_api_port/api/v13/hosts\" | grep $fqdn",
+    tries => 6,
+    try_sleep => 5
+  }
+
   file { 'host.json':
     ensure  => $file_ensure,
     path    => '/tmp/host.json',
@@ -43,7 +49,7 @@ class cloudera::cluster::addhost (
     command => "/usr/bin/curl -H 'Content-Type: application/json' -u $cloudera::params::cm_api_user:$cloudera::params::cm_api_password -XPOST \"http://$cm_api_host:$cm_api_port/api/v13/clusters/$cdh_cluster_name/hosts\" -d @host.json > $cdh_metadata_dir/$fqdn.json.output",
     cwd     => "/tmp",
     creates => "$cdh_metadata_dir/$fqdn.json.output",
-    require => File['host.json'],
+    require => [Exec['wait-host-registration'],File['host.json']],
     tries   => 3,
     try_sleep => 60
   }

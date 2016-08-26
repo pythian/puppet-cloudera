@@ -28,6 +28,7 @@
 #
 
 define cloudera::cluster::configservice (
+  $cdh_metadata_dir  = $cloudera::params::cdh_metadata_dir,
   $cdh_cluster_name  = $cloudera::params::cdh_cluster_name,
   $cm_api_host       = $cloudera::params::cm_api_host,
   $cm_api_port       = $cloudera::params::cm_api_port,
@@ -44,9 +45,9 @@ define cloudera::cluster::configservice (
   }
 
   exec { "add config for service $cdh_service_config":
-    command => "/usr/bin/curl -H 'Content-Type: application/json' -u $cloudera::params::cm_api_user:$cloudera::params::cm_api_password -XPUT \"http://$cm_api_host:$cm_api_port/api/v1/clusters/$cdh_cluster_name/services/$cdh_service_config/config\" -d @$cdh_service_config-config.json > /tmp/log 2>&1 && touch /var/tmp/$cdh_service_config-config.lock",
+    command => "/usr/bin/curl -H 'Content-Type: application/json' -u $cloudera::params::cm_api_user:$cloudera::params::cm_api_password -XPUT \"http://$cm_api_host:$cm_api_port/api/v1/clusters/$cdh_cluster_name/services/$cdh_service_config/config\" -d @$cdh_service_config-config.json > $cdh_metadata_dir/$cdh_service_config-config.json.output",
     cwd     => "/tmp",
-    creates => "/var/tmp/$cdh_service_config-config.lock",
+    creates => "$cdh_metadata_dir/$cdh_service_config-config.json.output",
     require => File["$cdh_service_config-config.json"],
     tries   => 3,
     try_sleep => 60

@@ -101,9 +101,9 @@ class cloudera::cluster::roles::datanode (
     parcels_version => $cdh_cluster_parcels_release,
     require => Class['cloudera::cluster::parcels::distribute[CDH]']
   }
-#  class {'::cloudera::cluster::start':
-#    cdh_cluster_name => $cdh_cluster_name,
-#    cm_api_host => $cm_api_host,
-#    require => Class['cloudera::cluster::parcels::activate[CDH]']
-#  }
+  class {'::cloudera::cluster::start':
+    cdh_cluster_name => $cdh_cluster_name,
+    cm_api_host => $cm_api_host,
+    require => Class['cloudera::cluster::parcels::activate[CDH]']
+  }
 }

@@ -29,7 +29,7 @@ class cloudera::cluster::roles::servicenode_2 (
   }
   cloudera::cluster::addrole{'YARN':
     cdh_cluster_name => $cdh_cluster_name,
-    cdh_service_roles => ['RESOURCEMANAGER','HISTORYSERVER'],
+    cdh_service_roles => ['RESOURCEMANAGER','JOBHISTORY'],
     cm_api_host => $cm_api_host,
     require => Class['::cloudera::cluster::addhost'],
   }

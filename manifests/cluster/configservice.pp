@@ -45,7 +45,7 @@ define cloudera::cluster::configservice (
   }
 
   exec { "add config for service $cdh_service_config":
-    command => "/usr/bin/curl -H 'Content-Type: application/json' -u $cloudera::params::cm_api_user:$cloudera::params::cm_api_password -XPUT \"http://$cm_api_host:$cm_api_port/api/v1/clusters/$cdh_cluster_name/services/$cdh_service_config/config\" -d @$cdh_service_config-config.json > $cdh_metadata_dir/$cdh_service_config-config.json.output",
+    command => "/usr/bin/curl -H 'Content-Type: application/json' -u $cloudera::params::cm_api_user:$cloudera::params::cm_api_password -XPUT \"http://$cm_api_host:$cm_api_port/api/v13/clusters/$cdh_cluster_name/services/$cdh_service_config/config\" -d @$cdh_service_config-config.json > $cdh_metadata_dir/$cdh_service_config-config.json.output",
     cwd     => "/tmp",
     creates => "$cdh_metadata_dir/$cdh_service_config-config.json.output",
     require => File["$cdh_service_config-config.json"],

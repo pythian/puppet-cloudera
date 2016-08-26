@@ -85,19 +85,19 @@ class cloudera::cluster::roles::datanode (
   ::cloudera::cluster::parcels::download{'CDH':
     cdh_cluster_name => $cdh_cluster_name,
     cm_api_host => $cm_api_host,
-    cdh_cluster_minor_release => $cdh_cluster_minor_release,
+    parcels_version => $cdh_cluster_minor_release,
     require => Class['cloudera::cluster::configroletype[HDFS-NN]']
   }
   ::cloudera::cluster::parcels::distribute{'CDH':
     cdh_cluster_name => $cdh_cluster_name,
     cm_api_host => $cm_api_host,
-    cdh_cluster_minor_release => $cdh_cluster_minor_release,
+    parcels_version => $cdh_cluster_minor_release,
     require => Class['cloudera::cluster::parcels::download[CDH]']
   }
   ::cloudera::cluster::parcels::activate{'CDH':
     cdh_cluster_name => $cdh_cluster_name,
     cm_api_host => $cm_api_host,
-    cdh_cluster_minor_release => $cdh_cluster_minor_release,
+    parcels_version => $cdh_cluster_minor_release,
     require => Class['cloudera::cluster::parcels::distribute[CDH]']
   }
 #  class {'::cloudera::cluster::start':

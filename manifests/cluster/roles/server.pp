@@ -2,6 +2,7 @@ class cloudera::cluster::roles::server (
   $cdh_metadata_dir  = $cloudera::params::cdh_metadata_dir,
   $cdh_cluster_name  = $cloudera::params::cdh_cluster_name,
   $cdh_cluster_version  = $cloudera::params::cdh_cluster_version,
+  $cdh_cluster_ha    = $cloudera::params::cdh_cluster_ha,
   $cdh_full_version  = $cloudera::params::cdh_full_version,
   $cm_api_host       = $cloudera::params::cm_api_host,
   $cm_api_port       = $cloudera::params::cm_api_port,
@@ -33,7 +34,6 @@ class cloudera::cluster::roles::server (
       db_pass => $cm_db_pass
     }
   }
-
   class { '::cloudera::cluster':
     require => Class['::cloudera']
   }

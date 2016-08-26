@@ -3,7 +3,8 @@ class cloudera::cluster::roles::datanode (
   $cdh_metadata_dir  = $cloudera::params::cdh_metadata_dir,
   $cdh_cluster_name  = $cloudera::params::cdh_cluster_name,
   $cdh_cluster_ha    = $cloudera::params::cdh_cluster_ha,
-  $cdh_cluster_full_version = $cdh_cluster_full_version,
+  $cdh_cluster_major_release = $cdh_cluster_major_release,
+  $cdh_cluster_minor_release = $cdh_cluster_minor_release,
   $cm_api_host       = $cloudera::params::cm_api_host,
   $cm_api_port       = $cloudera::params::cm_api_port,
   $cm_api_user       = $cloudera::params::cm_api_user,
@@ -76,22 +77,27 @@ class cloudera::cluster::roles::datanode (
     cm_api_host => $cm_api_host,
     require => Class['::cloudera::cluster::addhost'],
   }
+  ::cloudera::cluster::parcels::config{"CDH-$cdh_cluster_major_version":
+    cm_api_host => $cm_api_host,
+    items_config => [{ "name" => "REMOTE_PARCEL_REPO_URLS", "value" => "https://archive.cloudera.com/cdh5/parcels/$cdh_cluster_major_version/"}],
+    require => Class['::cloudera']
+  }
   ::cloudera::cluster::parcels::download{'CDH':
     cdh_cluster_name => $cdh_cluster_name,
     cm_api_host => $cm_api_host,
-    parcels_version => $cdh_cluster_full_version,
+    parcels_version => $cdh_cluster_minor_release,
     require => Class['cloudera::cluster::configroletype[HDFS-NN]']
   }
   ::cloudera::cluster::parcels::distribute{'CDH':
     cdh_cluster_name => $cdh_cluster_name,
     cm_api_host => $cm_api_host,
-    parcels_version => $cdh_cluster_full_version,
+    parcels_version => $cdh_cluster_minor_release,
     require => Class['cloudera::cluster::parcels::download[CDH]']
   }
   ::cloudera::cluster::parcels::activate{'CDH':
     cdh_cluster_name => $cdh_cluster_name,
     cm_api_host => $cm_api_host,
-    parcels_version => $cdh_cluster_full_version,
+    parcels_version => $cdh_cluster_minor_release,
     require => Class['cloudera::cluster::parcels::distribute[CDH]']
   }
 #  class {'::cloudera::cluster::start':

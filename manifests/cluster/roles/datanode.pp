@@ -25,19 +25,19 @@ class cloudera::cluster::roles::datanode (
     cdh_service_roles => ['DATANODE'],
     cm_api_host => $cm_api_host,
     require => Class['::cloudera::cluster::addhost'],
-  },
+  }
   cloudera::cluster::configservice{'HDFS':
     cdh_cluster_name => $cdh_cluster_name,
     items_config => [{ "name" => "zookeeper_service", "value" => "ZOOKEEPER"}]
     cm_api_host => $cm_api_host,
     require => Class['cloudera::cluster::addservice[HDFS]'],
-  },
+  }
   cloudera::cluster::addrole{'HBASE':
     cdh_cluster_name => $cdh_cluster_name,
     cdh_service_roles => ['REGIONSERVER'],
     cm_api_host => $cm_api_host,
     require => Class['::cloudera::cluster::addhost'],
-  },
+  }
   cloudera::cluster::addrole{'YARN':
     cdh_cluster_name => $cdh_cluster_name,
     cdh_service_roles => ['NODEMANAGER'],

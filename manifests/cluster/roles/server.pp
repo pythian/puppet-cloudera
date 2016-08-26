@@ -57,23 +57,28 @@ class cloudera::cluster::roles::server (
   }
   cloudera::cluster::addservice{'ZOOKEEPER':
     cm_api_host => $cm_api_host,
-    cdh_cluster_name => $cdh_cluster_name
+    cdh_cluster_name => $cdh_cluster_name,
+    require => Class['::cloudera::cluster::addhost']
   }
   cloudera::cluster::addservice{'HDFS':
     cm_api_host => $cm_api_host,
-    cdh_cluster_name => $cdh_cluster_name
+    cdh_cluster_name => $cdh_cluster_name,
+    require => Class['::cloudera::cluster::addhost']
   }
   cloudera::cluster::addservice{'HBASE':
     cm_api_host => $cm_api_host,
-    cdh_cluster_name => $cdh_cluster_name
+    cdh_cluster_name => $cdh_cluster_name,
+    require => Class['::cloudera::cluster::addhost']
   }
   cloudera::cluster::addservice{'YARN':
     cm_api_host => $cm_api_host,
-    cdh_cluster_name => $cdh_cluster_name
+    cdh_cluster_name => $cdh_cluster_name,
+    require => Class['::cloudera::cluster::addhost']
   }
   cloudera::cluster::addrole{'ZOOKEEPER':
     cm_api_host => $cm_api_host,
     cdh_cluster_name => $cdh_cluster_name,
-    cdh_service_roles => $cdh_service_roles
+    cdh_service_roles => $cdh_service_roles,
+    require => Class['cloudera::cluster::addservice[ZOOKEEPER]']
   }
 }

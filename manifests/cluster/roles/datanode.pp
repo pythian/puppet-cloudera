@@ -40,7 +40,7 @@ class cloudera::cluster::roles::datanode (
     cdh_service_roletype => 'NAMENODE',
     items_config => [{ "name" => "dfs_name_dir_list", "value" => "/namenode/"}],
     cm_api_host => $cm_api_host,
-    require => Class['cloudera::cluster::addservice[HDFS]']
+    require => Class['cloudera::cluster::addrole[HDFS]']
   }
   cloudera::cluster::configroletype{'HDFS-DN':
     cdh_cluster_name => $cdh_cluster_name,
@@ -48,7 +48,7 @@ class cloudera::cluster::roles::datanode (
     cdh_service_roletype => 'DATANODE',
     items_config => [{ "name" => "dfs_data_dir_list", "value" => "/datanode/"}],
     cm_api_host => $cm_api_host,
-    require => Class['cloudera::cluster::addservice[HDFS]']
+    require => Class['cloudera::cluster::addrole[HDFS]']
   }
   cloudera::cluster::configroletype{'HDFS-SNN':
     cdh_cluster_name => $cdh_cluster_name,
@@ -56,7 +56,7 @@ class cloudera::cluster::roles::datanode (
     cdh_service_roletype => 'SECONDARYNAMENODE',
     items_config => [{ "name" => "fs_checkpoint_dir_list", "value" => "/secondarynamenode/"}],
     cm_api_host => $cm_api_host,
-    require => Class['cloudera::cluster::addservice[HDFS]']
+    require => Class['cloudera::cluster::addrole[HDFS]']
   }
   cloudera::cluster::addrole{'HBASE':
     cdh_cluster_name => $cdh_cluster_name,

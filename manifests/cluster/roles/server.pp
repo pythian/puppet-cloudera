@@ -2,7 +2,6 @@ class cloudera::cluster::roles::server (
   $cdh_metadata_dir  = $cloudera::params::cdh_metadata_dir,
   $cdh_cluster_name  = $cloudera::params::cdh_cluster_name,
   $cdh_cluster_version  = $cloudera::params::cdh_cluster_version,
-  $cdh_service_roles = $cloudera::params::cdh_service_roles,
   $cdh_full_version  = $cloudera::params::cdh_full_version,
   $cm_api_host       = $cloudera::params::cm_api_host,
   $cm_api_port       = $cloudera::params::cm_api_port,
@@ -78,7 +77,7 @@ class cloudera::cluster::roles::server (
   cloudera::cluster::addrole{'ZOOKEEPER':
     cm_api_host => $cm_api_host,
     cdh_cluster_name => $cdh_cluster_name,
-    cdh_service_roles => $cdh_service_roles,
+    cdh_service_roles => ['SERVER'],
     require => Class['cloudera::cluster::addservice[ZOOKEEPER]']
   }
 }

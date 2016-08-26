@@ -68,7 +68,7 @@ class cloudera::cluster::roles::datanode (
     cdh_cluster_name => $cdh_cluster_name,
     items_config => [{ "name" => "hdfs_rootdir", "value" => "/HBASE"},{ "name" => "zookeeper_service", "value" => "ZOOKEEPER"},{ "name" => "hdfs_service", "value" => "HDFS"}],
     cm_api_host => $cm_api_host,
-    require => Class['cloudera::cluster::addservice[HBASE]']
+    require => Class['cloudera::cluster::addrole[HBASE]']
   }
   cloudera::cluster::addrole{'YARN':
     cdh_cluster_name => $cdh_cluster_name,

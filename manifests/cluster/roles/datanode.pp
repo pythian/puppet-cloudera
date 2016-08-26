@@ -77,9 +77,9 @@ class cloudera::cluster::roles::datanode (
     cm_api_host => $cm_api_host,
     require => Class['::cloudera::cluster::addhost'],
   }
-  ::cloudera::cluster::parcels::config{"CDH-$cdh_cluster_major_version":
+  ::cloudera::cluster::parcels::config{"CDH-$cdh_cluster_major_release":
     cm_api_host => $cm_api_host,
-    items_config => [{ "name" => "REMOTE_PARCEL_REPO_URLS", "value" => "https://archive.cloudera.com/cdh5/parcels/$cdh_cluster_major_version/"}],
+    items_config => [{ "name" => "REMOTE_PARCEL_REPO_URLS", "value" => "https://archive.cloudera.com/cdh5/parcels/$cdh_cluster_major_release/"}],
     require => Class['::cloudera']
   }
   ::cloudera::cluster::parcels::download{'CDH':

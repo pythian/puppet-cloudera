@@ -86,6 +86,14 @@ class cloudera::roles::server (
     cm_api_host => $cm_api_host,
     require => Class['cloudera::api::addservice[YARN]']
   }
+  cloudera::api::configrolegroup{'YARN':
+    cdh_cluster_name => $cdh_cluster_name,
+    cdh_cluster_service => 'YARN',
+    cdh_service_rolegroup => 'YARN-NODEMANAGER-BASE',
+    items_config => [{ "name" => "yarn_nodemanager_local_dirs", "value" => "/dfs/yarn/nodemanager"}],
+    cm_api_host => $cm_api_host,
+    require => Class['cloudera::api::addservice[YARN]']
+  }
   cloudera::api::addrole{'ZOOKEEPER':
     cm_api_host => $cm_api_host,
     cdh_cluster_name => $cdh_cluster_name,

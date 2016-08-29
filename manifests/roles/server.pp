@@ -82,7 +82,7 @@ class cloudera::roles::server (
   }
   cloudera::api::configservice{'YARN':
     cdh_cluster_name => $cdh_cluster_name,
-    items_config => [{ "name" => "hdfs_service", "value" => "HDFS"}],
+    items_config => [{ "name": => "yarn_nodemanager_local-dirs", "value": "/dfs/nodemanager/" }, { "name" => "hdfs_service", "value" => "HDFS"}],
     cm_api_host => $cm_api_host,
     require => Class['cloudera::api::addservice[YARN]']
   }

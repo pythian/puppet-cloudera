@@ -1,4 +1,4 @@
-# == Class: cloudera::cluster::addrole
+# == Class: cloudera::api::addrole
 #
 # This class handles installing and configuring the Cloudera Manager Server.
 #
@@ -15,7 +15,7 @@
 #
 # === Sample Usage:
 #
-#   cloudera::cluster::addrole{'HBASE':
+#   cloudera::api::addrole{'HBASE':
 #     cm_api_host => $cloudera::params::cm_api_host,
 #     cm_api_port => $cloudera::params::cm_api_port
 #   }
@@ -27,7 +27,7 @@
 #
 #
 
-define cloudera::cluster::addrole (
+define cloudera::api::addrole (
   $cdh_metadata_dir  = $cloudera::params::cdh_metadata_dir,
   $cdh_cluster_name  = $cloudera::params::cdh_cluster_name,
   $cm_api_host       = $cloudera::params::cm_api_host,

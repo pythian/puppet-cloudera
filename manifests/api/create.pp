@@ -1,4 +1,4 @@
-# == Class: cloudera::cluster::create
+# == Class: cloudera::api::create
 #
 # This class handles installing and configuring the Cloudera Manager Server.
 #
@@ -23,7 +23,7 @@
 # === Copyright:
 #
 #
-class cloudera::cluster::create (
+class cloudera::api::create (
   $file_ensure       = $cloudera::params::file_ensure,
   $cdh_metadata_dir  = $cloudera::params::cdh_metadata_dir,
   $cdh_cluster_name  = $cloudera::params::cdh_cluster_name,

@@ -1,4 +1,4 @@
-# == Class: cloudera::cluster::addservice
+# == Class: cloudera::api::startservice
 #
 # This class handles installing and configuring the Cloudera Manager Server.
 #
@@ -15,7 +15,7 @@
 #
 # === Sample Usage:
 #
-#   cloudera::cluster::addservice{'HBASE':
+#   cloudera::api::startservice{'HBASE':
 #     cm_api_host => $cloudera::params::cm_api_host,
 #     cm_api_port => $cloudera::params::cm_api_port
 #   }
@@ -27,28 +27,22 @@
 #
 #
 
-define cloudera::cluster::addservice (
+define cloudera::api::startservice (
   $cdh_metadata_dir  = $cloudera::params::cdh_metadata_dir,
   $cdh_cluster_name  = $cloudera::params::cdh_cluster_name,
   $cm_api_host       = $cloudera::params::cm_api_host,
   $cm_api_port       = $cloudera::params::cm_api_port,
   $cm_api_user       = $cloudera::params::cm_api_user,
   $cm_api_password   = $cloudera::params::cm_api_password,
-  $cdh_service_name = $title
+  $cdh_cluster_service = $title,
 ) {
 
-  file { "$cdh_service_name.json":
-    ensure  => $file_ensure,
-    path    => "/tmp/$cdh_service_name.json",
-    content => template("${module_name}/service.json.erb")
-  }
-
-  exec { "add service $cdh_service_name":
-    command => "/usr/bin/curl -H 'Content-Type: application/json' -u $cloudera::params::cm_api_user:$cloudera::params::cm_api_password -XPOST \"http://$cm_api_host:$cm_api_port/api/v13/clusters/$cdh_cluster_name/services\" -d @$cdh_service_name.json > $cdh_metadata_dir/$cdh_service_name.json.output",
+  exec { "start service $cdh_cluster_service":
+    command => "/usr/bin/curl -H 'Content-Type: application/json' -u $cloudera::params::cm_api_user:$cloudera::params::cm_api_password -XPOST \"http://$cm_api_host:$cm_api_port/api/v13/clusters/$cdh_cluster_name/services/$cdh_cluster_service/commands/firstRun\" > $cdh_metadata_dir/$cdh_cluster_service-started.lock",
     cwd     => "/tmp",
-    creates => "$cdh_metadata_dir/$cdh_service_name.json.output",
-    require => File["$cdh_service_name.json"],
+    creates => "$cdh_metadata_dir/$cdh_cluster_service-started.lock",
     tries   => 3,
     try_sleep => 60
   }
+
 }

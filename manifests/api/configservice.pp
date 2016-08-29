@@ -1,4 +1,4 @@
-# == Class: cloudera::cluster::configservice
+# == Class: cloudera::api::configservice
 #
 # This class handles installing and configuring the Cloudera Manager Server.
 #
@@ -15,7 +15,7 @@
 #
 # === Sample Usage:
 #
-#   cloudera::cluster::configservice{'HBASE':
+#   cloudera::api::configservice{'HBASE':
 #     cm_api_host => $cloudera::params::cm_api_host,
 #     cm_api_port => $cloudera::params::cm_api_port
 #   }
@@ -27,7 +27,7 @@
 #
 #
 
-define cloudera::cluster::configservice (
+define cloudera::api::configservice (
   $cdh_metadata_dir  = $cloudera::params::cdh_metadata_dir,
   $cdh_cluster_name  = $cloudera::params::cdh_cluster_name,
   $cm_api_host       = $cloudera::params::cm_api_host,

@@ -1,4 +1,4 @@
-class cloudera::cluster::roles::servicenode (
+class cloudera::api::roles::servicenode_1 (
   $file_ensure       = $cloudera::params::file_ensure,
   $cdh_metadata_dir  = $cloudera::params::cdh_metadata_dir,
   $cdh_cluster_name  = $cloudera::params::cdh_cluster_name,
@@ -13,30 +13,30 @@ class cloudera::cluster::roles::servicenode (
     cm_server_host => $cm_api_host,
     use_parcels => true
   }
-  class { '::cloudera::cluster':
+  class { '::cloudera::api':
     require => Class['::cloudera']
   }
-  class { '::cloudera::cluster::addhost':
+  class { '::cloudera::api::addhost':
     cdh_cluster_name => $cdh_cluster_name,
     cm_api_host => $cm_api_host,
-    require => Class['::cloudera::cluster']
+    require => Class['::cloudera::api']
   }
-  cloudera::cluster::addrole{'HDFS':
+  cloudera::api::addrole{'HDFS':
     cdh_cluster_name => $cdh_cluster_name,
-    cdh_service_roles => ['SECONDARYNAMENODE'],
+    cdh_service_roles => ['NAMENODE'],
     cm_api_host => $cm_api_host,
-    require => Class['::cloudera::cluster::addhost'],
+    require => Class['::cloudera::api::addhost'],
   }
-  cloudera::cluster::addrole{'YARN':
+  cloudera::api::addrole{'HBASE':
     cdh_cluster_name => $cdh_cluster_name,
-    cdh_service_roles => ['RESOURCEMANAGER','JOBHISTORY'],
+    cdh_service_roles => ['MASTER'],
     cm_api_host => $cm_api_host,
-    require => Class['::cloudera::cluster::addhost'],
+    require => Class['::cloudera::api::addhost'],
   }
-  cloudera::cluster::addrole{'ZOOKEEPER':
+  cloudera::api::addrole{'ZOOKEEPER':
     cdh_cluster_name => $cdh_cluster_name,
     cdh_service_roles => ['SERVER'],
     cm_api_host => $cm_api_host,
-    require => Class['::cloudera::cluster::addhost'],
+    require => Class['::cloudera::api::addhost'],
   }
 }

@@ -1,4 +1,4 @@
-class cloudera::cluster::roles::datanode (
+class cloudera::api::roles::datanode (
   $file_ensure       = $cloudera::params::file_ensure,
   $cdh_metadata_dir  = $cloudera::params::cdh_metadata_dir,
   $cdh_cluster_name  = $cloudera::params::cdh_cluster_name,
@@ -16,94 +16,94 @@ class cloudera::cluster::roles::datanode (
     cm_server_host => $cm_api_host,
     use_parcels => true
   }
-  class { '::cloudera::cluster':
+  class { '::cloudera::api':
     require => Class['::cloudera']
   }
-  class { '::cloudera::cluster::addhost':
+  class { '::cloudera::api::addhost':
     cdh_cluster_name => $cdh_cluster_name,
     cm_api_host => $cm_api_host,
-    require => Class['::cloudera::cluster']
+    require => Class['::cloudera::api']
   }
-  cloudera::cluster::addrole{'HDFS':
+  cloudera::api::addrole{'HDFS':
     cdh_cluster_name => $cdh_cluster_name,
     cdh_service_roles => ['DATANODE'],
     cm_api_host => $cm_api_host,
-    require => Class['::cloudera::cluster::addhost'],
+    require => Class['::cloudera::api::addhost'],
   }
-  cloudera::cluster::configservice{'HDFS':
+  cloudera::api::configservice{'HDFS':
     cdh_cluster_name => $cdh_cluster_name,
     items_config => [{ "name" => "zookeeper_service", "value" => "ZOOKEEPER"}],
     cm_api_host => $cm_api_host,
-    require => Class['cloudera::cluster::addrole[HDFS]'],
+    require => Class['cloudera::api::addrole[HDFS]'],
   }
-  cloudera::cluster::configroletype{'HDFS-NN':
+  cloudera::api::configroletype{'HDFS-NN':
     cdh_cluster_name => $cdh_cluster_name,
     cdh_cluster_service => 'HDFS',
     cdh_service_roletype => 'NAMENODE',
     items_config => [{ "name" => "dfs_name_dir_list", "value" => "/namenode/"}],
     cm_api_host => $cm_api_host,
-    require => Class['cloudera::cluster::addrole[HDFS]']
+    require => Class['cloudera::api::addrole[HDFS]']
   }
-  cloudera::cluster::configroletype{'HDFS-DN':
+  cloudera::api::configroletype{'HDFS-DN':
     cdh_cluster_name => $cdh_cluster_name,
     cdh_cluster_service => 'HDFS',
     cdh_service_roletype => 'DATANODE',
     items_config => [{ "name" => "dfs_data_dir_list", "value" => "/datanode/"}],
     cm_api_host => $cm_api_host,
-    require => Class['cloudera::cluster::addrole[HDFS]']
+    require => Class['cloudera::api::addrole[HDFS]']
   }
-  cloudera::cluster::configroletype{'HDFS-SNN':
+  cloudera::api::configroletype{'HDFS-SNN':
     cdh_cluster_name => $cdh_cluster_name,
     cdh_cluster_service => 'HDFS',
     cdh_service_roletype => 'SECONDARYNAMENODE',
     items_config => [{ "name" => "fs_checkpoint_dir_list", "value" => "/secondarynamenode/"}],
     cm_api_host => $cm_api_host,
-    require => Class['cloudera::cluster::addrole[HDFS]']
+    require => Class['cloudera::api::addrole[HDFS]']
   }
-  cloudera::cluster::addrole{'HBASE':
+  cloudera::api::addrole{'HBASE':
     cdh_cluster_name => $cdh_cluster_name,
     cdh_service_roles => ['REGIONSERVER'],
     cm_api_host => $cm_api_host,
-    require => Class['::cloudera::cluster::addhost'],
+    require => Class['::cloudera::api::addhost'],
   }
-  cloudera::cluster::configservice{'HBASE':
+  cloudera::api::configservice{'HBASE':
     cdh_cluster_name => $cdh_cluster_name,
     items_config => [{ "name" => "hdfs_rootdir", "value" => "/HBASE"},{ "name" => "zookeeper_service", "value" => "ZOOKEEPER"},{ "name" => "hdfs_service", "value" => "HDFS"}],
     cm_api_host => $cm_api_host,
-    require => Class['cloudera::cluster::addrole[HBASE]']
+    require => Class['cloudera::api::addrole[HBASE]']
   }
-  cloudera::cluster::addrole{'YARN':
+  cloudera::api::addrole{'YARN':
     cdh_cluster_name => $cdh_cluster_name,
     cdh_service_roles => ['NODEMANAGER'],
     cm_api_host => $cm_api_host,
-    require => Class['::cloudera::cluster::addhost'],
+    require => Class['::cloudera::api::addhost'],
   }
-  ::cloudera::cluster::parcels::config{"CDH-$cdh_cluster_major_release":
+  ::cloudera::parcels::config{"CDH-$cdh_cluster_major_release":
     cm_api_host => $cm_api_host,
     items_config => [{ "name" => "REMOTE_PARCEL_REPO_URLS", "value" => "https://archive.cloudera.com/cdh5/parcels/$cdh_cluster_major_release/"}],
-    require => Class['::cloudera::cluster::addhost']
+    require => Class['::cloudera::api::addhost']
   }
-  ::cloudera::cluster::parcels::download{'CDH':
+  ::cloudera::parcels::download{'CDH':
     cdh_cluster_name => $cdh_cluster_name,
     cm_api_host => $cm_api_host,
     parcels_version => $cdh_cluster_parcels_release,
-    require => Class["cloudera::cluster::parcels::config[CDH-$cdh_cluster_major_release]"]
+    require => Class["cloudera::parcels::config[CDH-$cdh_cluster_major_release]"]
   }
-  ::cloudera::cluster::parcels::distribute{'CDH':
+  ::cloudera::parcels::distribute{'CDH':
     cdh_cluster_name => $cdh_cluster_name,
     cm_api_host => $cm_api_host,
     parcels_version => $cdh_cluster_parcels_release,
-    require => Class['cloudera::cluster::parcels::download[CDH]']
+    require => Class['cloudera::parcels::download[CDH]']
   }
-  ::cloudera::cluster::parcels::activate{'CDH':
+  ::cloudera::parcels::activate{'CDH':
     cdh_cluster_name => $cdh_cluster_name,
     cm_api_host => $cm_api_host,
     parcels_version => $cdh_cluster_parcels_release,
-    require => Class['cloudera::cluster::parcels::distribute[CDH]']
+    require => Class['cloudera::parcels::distribute[CDH]']
   }
-  class {'::cloudera::cluster::start':
+  class {'::cloudera::api::start':
     cdh_cluster_name => $cdh_cluster_name,
     cm_api_host => $cm_api_host,
-    require => Class['cloudera::cluster::parcels::activate[CDH]']
+    require => Class['cloudera::parcels::activate[CDH]']
   }
 }

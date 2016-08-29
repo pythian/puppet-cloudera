@@ -1,4 +1,4 @@
-define cloudera::cluster::parcels::config (
+define cloudera::parcels::config (
   $cdh_metadata_dir  = $cloudera::params::cdh_metadata_dir,
   $cm_api_host       = $cloudera::params::cm_api_host,
   $cm_api_port       = $cloudera::params::cm_api_port,

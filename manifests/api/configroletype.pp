@@ -1,4 +1,4 @@
-# == Class: cloudera::cluster::configroletype
+# == Class: cloudera::api::configroletype
 #
 # This class handles installing and configuring the Cloudera Manager Server.
 #
@@ -15,7 +15,7 @@
 #
 # === Sample Usage:
 #
-#   cloudera::cluster::configroletype{'HDFS':
+#   cloudera::api::configroletype{'HDFS':
 #     cm_api_host => $cloudera::params::cm_api_host,
 #     cm_api_port => $cloudera::params::cm_api_port,
 #     cdh_service_roletype => $cloudera::params::cdh_service_roletype
@@ -28,7 +28,7 @@
 #
 #
 
-define cloudera::cluster::configroletype (
+define cloudera::api::configroletype (
   $cdh_metadata_dir  = $cloudera::params::cdh_metadata_dir,
   $cdh_cluster_name  = $cloudera::params::cdh_cluster_name,
   $cm_api_host       = $cloudera::params::cm_api_host,

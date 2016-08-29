@@ -1,4 +1,4 @@
-define cloudera::cluster::parcels::download (
+define cloudera::parcels::download (
   $cdh_metadata_dir  = $cloudera::params::cdh_metadata_dir,
   $cdh_cluster_name  = $cloudera::params::cdh_cluster_name,
   $parcels_product   = $title,

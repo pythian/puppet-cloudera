@@ -1,4 +1,4 @@
-class cloudera::api::roles::servicenode (
+class cloudera::roles::servicenode (
   $file_ensure       = $cloudera::params::file_ensure,
   $cdh_metadata_dir  = $cloudera::params::cdh_metadata_dir,
   $cdh_cluster_name  = $cloudera::params::cdh_cluster_name,

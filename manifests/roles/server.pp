@@ -104,6 +104,6 @@ class cloudera::roles::server (
     cm_api_host => $cm_api_host,
     cdh_cluster_name => $cdh_cluster_name,
     cdh_service_roles => ['JOURNALNODE'],
-    require => Class['cloudera::api::addservice[ZOOKEEPER]']
+    require => Class['cloudera::api::addservice[HDFS]']
   }
 }

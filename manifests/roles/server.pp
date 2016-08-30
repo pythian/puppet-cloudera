@@ -106,4 +106,12 @@ class cloudera::roles::server (
     cdh_service_roles => ['JOURNALNODE'],
     require => Class['cloudera::api::addservice[HDFS]']
   }
+  cloudera::api::configrolegroup{'HDFS-JOURNALNODE-BASE':
+    cdh_cluster_name => $cdh_cluster_name,
+    cdh_cluster_service => 'HDFS',
+    cdh_service_rolegroup => 'HDFS-JOURNALNODE-BASE',
+    items_config => [{ "name" => "dfs_journalnode_edits_dir", "value" => "/dfs/hdfs/journalnode"}],
+    cm_api_host => $cm_api_host,
+    require => Class['cloudera::api::addservice[HDFS]']
+  }
 }

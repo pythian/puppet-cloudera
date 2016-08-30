@@ -103,17 +103,27 @@ class cloudera::roles::datanode (
       parcels_version => $cdh_cluster_parcels_release,
       require => Class['cloudera::parcels::distribute[CDH]']
     }
-    ::cloudera::api::startservice{'ZOOKEEPER':
-      cdh_cluster_name => $cdh_cluster_name,
-      cm_api_host => $cm_api_host,
-      require => Class['cloudera::parcels::activate[CDH]']
+    if $cdh_cluster_ha == 0 {
+      # it should go to out of if block after start of whole cluster works on HA mode
+      # currently, start class is commented due to issue when HA CFG is enabled
+      class {'::cloudera::api::start':
+        cdh_cluster_name => $cdh_cluster_name,
+        cm_api_host => $cm_api_host,
+        require => Class['cloudera::parcels::activate[CDH]']
+      }
+    } else {
+      ::cloudera::api::startservice{'ZOOKEEPER':
+        cdh_cluster_name => $cdh_cluster_name,
+        cm_api_host => $cm_api_host,
+        require => Class['cloudera::parcels::activate[CDH]']
+      }
+      ::cloudera::api::startservice{'HDFS':
+        cdh_cluster_name => $cdh_cluster_name,
+        cm_api_host => $cm_api_host,
+        require => Class['cloudera::parcels::activate[CDH]']
+      }
     }
-    ::cloudera::api::startservice{'HDFS':
-      cdh_cluster_name => $cdh_cluster_name,
-      cm_api_host => $cm_api_host,
-      require => Class['cloudera::parcels::activate[CDH]']
-    }
-    #class {'::cloudera::api::startservice':
+    #class {'::cloudera::api::start':
     #  cdh_cluster_name => $cdh_cluster_name,
     #  cm_api_host => $cm_api_host,
     #  require => Class['cloudera::parcels::activate[CDH]']

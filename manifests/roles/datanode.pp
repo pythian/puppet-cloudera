@@ -103,11 +103,21 @@ class cloudera::roles::datanode (
       parcels_version => $cdh_cluster_parcels_release,
       require => Class['cloudera::parcels::distribute[CDH]']
     }
-    class {'::cloudera::api::start':
+    ::cloudera::api::startservice{'ZOOKEEPER':
       cdh_cluster_name => $cdh_cluster_name,
       cm_api_host => $cm_api_host,
       require => Class['cloudera::parcels::activate[CDH]']
     }
+    ::cloudera::api::startservice{'HDFS':
+      cdh_cluster_name => $cdh_cluster_name,
+      cm_api_host => $cm_api_host,
+      require => Class['cloudera::parcels::activate[CDH]']
+    }
+    #class {'::cloudera::api::startservice':
+    #  cdh_cluster_name => $cdh_cluster_name,
+    #  cm_api_host => $cm_api_host,
+    #  require => Class['cloudera::parcels::activate[CDH]']
+    #}
   } else {
     notify{"Server number $server_leader. Skipping classes":}
   }

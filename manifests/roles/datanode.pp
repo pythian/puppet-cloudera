@@ -1,5 +1,6 @@
 class cloudera::roles::datanode (
   $file_ensure       = $cloudera::params::file_ensure,
+  $server_leader     = $cloudera::params::server_leader,
   $cdh_metadata_dir  = $cloudera::params::cdh_metadata_dir,
   $cdh_cluster_name  = $cloudera::params::cdh_cluster_name,
   $cdh_cluster_ha    = $cloudera::params::cdh_cluster_ha,
@@ -78,32 +79,36 @@ class cloudera::roles::datanode (
     cm_api_host => $cm_api_host,
     require => Class['::cloudera::api::addhost'],
   }
-  ::cloudera::parcels::config{"CDH-$cdh_cluster_major_release":
-    cm_api_host => $cm_api_host,
-    items_config => [{ "name" => "REMOTE_PARCEL_REPO_URLS", "value" => "https://archive.cloudera.com/cdh5/parcels/$cdh_cluster_major_release/"}],
-    require => Class['::cloudera::api::addhost']
-  }
-  ::cloudera::parcels::download{'CDH':
-    cdh_cluster_name => $cdh_cluster_name,
-    cm_api_host => $cm_api_host,
-    parcels_version => $cdh_cluster_parcels_release,
-    require => Class["cloudera::parcels::config[CDH-$cdh_cluster_major_release]"]
-  }
-  ::cloudera::parcels::distribute{'CDH':
-    cdh_cluster_name => $cdh_cluster_name,
-    cm_api_host => $cm_api_host,
-    parcels_version => $cdh_cluster_parcels_release,
-    require => Class['cloudera::parcels::download[CDH]']
-  }
-  ::cloudera::parcels::activate{'CDH':
-    cdh_cluster_name => $cdh_cluster_name,
-    cm_api_host => $cm_api_host,
-    parcels_version => $cdh_cluster_parcels_release,
-    require => Class['cloudera::parcels::distribute[CDH]']
-  }
-  class {'::cloudera::api::start':
-    cdh_cluster_name => $cdh_cluster_name,
-    cm_api_host => $cm_api_host,
-    require => Class['cloudera::parcels::activate[CDH]']
+  if $server_leader == 0 {
+    ::cloudera::parcels::config{"CDH-$cdh_cluster_major_release":
+      cm_api_host => $cm_api_host,
+      items_config => [{ "name" => "REMOTE_PARCEL_REPO_URLS", "value" => "https://archive.cloudera.com/cdh5/parcels/$cdh_cluster_major_release/"}],
+      require => Class['::cloudera::api::addhost']
+    }
+    ::cloudera::parcels::download{'CDH':
+      cdh_cluster_name => $cdh_cluster_name,
+      cm_api_host => $cm_api_host,
+      parcels_version => $cdh_cluster_parcels_release,
+      require => Class["cloudera::parcels::config[CDH-$cdh_cluster_major_release]"]
+    }
+    ::cloudera::parcels::distribute{'CDH':
+      cdh_cluster_name => $cdh_cluster_name,
+      cm_api_host => $cm_api_host,
+      parcels_version => $cdh_cluster_parcels_release,
+      require => Class['cloudera::parcels::download[CDH]']
+    }
+    ::cloudera::parcels::activate{'CDH':
+      cdh_cluster_name => $cdh_cluster_name,
+      cm_api_host => $cm_api_host,
+      parcels_version => $cdh_cluster_parcels_release,
+      require => Class['cloudera::parcels::distribute[CDH]']
+    }
+    class {'::cloudera::api::start':
+      cdh_cluster_name => $cdh_cluster_name,
+      cm_api_host => $cm_api_host,
+      require => Class['cloudera::parcels::activate[CDH]']
+    }
+  } else {
+    notify("Server number $server_leader. Skipping classes")
   }
 }

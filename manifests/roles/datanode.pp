@@ -109,6 +109,6 @@ class cloudera::roles::datanode (
       require => Class['cloudera::parcels::activate[CDH]']
     }
   } else {
-    notify("Server number $server_leader. Skipping classes")
+    notify{"Server number $server_leader. Skipping classes":}
   }
 }

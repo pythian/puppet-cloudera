@@ -43,7 +43,7 @@ class cloudera::roles::servicenode_2 (
   } else {
     cloudera::api::addrole{'HDFS':
       cdh_cluster_name => $cdh_cluster_name,
-      cdh_service_roles => ['NAMENODE','JOURNALNODE'],
+      cdh_service_roles => ['NAMENODE','JOURNALNODE','FAILOVERCONTROLLER'],
       cm_api_host => $cm_api_host,
       require => Class['::cloudera::api::addhost'],
     }

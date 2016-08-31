@@ -40,9 +40,25 @@ class cloudera::cluster (
         db_pass => $cm_db_pass,
       }
     }
-  } else {
     exec {'waiting until CM API get ready':
       command => "/usr/bin/curl -u $cloudera::params::cm_api_user:$cloudera::params::cm_api_password -XGET \"http://$cm_api_host:$cm_api_port/api/v13\"",
+      tries => 6,
+      try_sleep => 300,
+      require => Class['::cloudera'],
+    }
+    class { '::cloudera::api::createcluster':
+      cdh_cluster_name => $cdh_cluster_name,
+      cm_api_host => $cm_api_host,
+      require => Class['waiting until CM API get ready']
+    }
+    class { '::cloudera::api::addhost':
+      cdh_cluster_name => $cdh_cluster_name,
+      cm_api_host => $cm_api_host,
+      require => Class['::cloudera::api::createcluster']
+    }
+  } else {
+    exec {'waiting for cluster creation':
+      command => "/usr/bin/curl -u $cloudera::params::cm_api_user:$cloudera::params::cm_api_password -XGET \"http://$cm_api_host:$cm_api_port/api/v13/clusters/$cdh_cluster_name\" | grep version",
       tries => 6,
       try_sleep => 300,
     }
@@ -50,7 +66,12 @@ class cloudera::cluster (
       cm_server_host => $cm_api_host,
       install_cmserver => false,
       use_parcels => true,
-      require => Exec['waiting until CM API get ready'],
+      require => Exec['waiting for cluster creation'],
+    }
+    class { '::cloudera::api::addhost':
+      cdh_cluster_name => $cdh_cluster_name,
+      cm_api_host => $cm_api_host,
+      require => Class['::cloudera']
     }
   }
 }

@@ -57,6 +57,11 @@ class cloudera::cluster (
       cm_api_host => $cm_api_host,
       require => Class['::cloudera::api::createcluster']
     }
+    class { '::cloudera::role::server':
+      cdh_cluster_name => $cdh_cluster_name,
+      cm_api_host => $cm_api_host,
+      require => Class['::cloudera::api::addhost']
+    }
   } else {
     exec {'waiting for cluster creation':
       command => "/usr/bin/curl -u $cloudera::params::cm_api_user:$cloudera::params::cm_api_password -XGET \"http://$cm_api_host:$cm_api_port/api/v13/clusters/$cdh_cluster_name\" | grep version",
@@ -74,5 +79,36 @@ class cloudera::cluster (
       cm_api_host => $cm_api_host,
       require => Class['::cloudera']
     }
+    if $cdh_cluster_role == 'SERVICENODE_1' {
+      class { '::cloudera::role::servicenode_1'
+        cdh_cluster_name => $cdh_cluster_name,
+        cm_api_host => $cm_api_host,
+        cdh_cluster_ha => $cdh_cluster_ha,
+        cdh_cluster_minor_release => $cdh_cluster_minor_release,
+        cdh_cluster_major_release => $cdh_cluster_major_release,
+        cdh_cluster_parcels_release => $cdh_cluster_parcels_release,
+        server_leader => $server_leader,
+      }
+    } elsif $cdh_cluster_role == 'SERVICENODE_2' {
+      class { '::cloudera::role::servicenode_2'
+        cdh_cluster_name => $cdh_cluster_name,
+        cm_api_host => $cm_api_host,
+        cdh_cluster_ha => $cdh_cluster_ha,
+        cdh_cluster_minor_release => $cdh_cluster_minor_release,
+        cdh_cluster_major_release => $cdh_cluster_major_release,
+        cdh_cluster_parcels_release => $cdh_cluster_parcels_release,
+        server_leader => $server_leader,
+      }
+
+    } elsif $cdh_cluster_role == 'DATANODE' {
+      class { '::cloudera::role::datanode'
+        cdh_cluster_name => $cdh_cluster_name,
+        cm_api_host => $cm_api_host,
+        cdh_cluster_ha => $cdh_cluster_ha,
+        cdh_cluster_minor_release => $cdh_cluster_minor_release,
+        cdh_cluster_major_release => $cdh_cluster_major_release,
+        cdh_cluster_parcels_release => $cdh_cluster_parcels_release,
+        server_leader => $server_leader,
+      }
   }
 }

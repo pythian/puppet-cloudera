@@ -12,24 +12,10 @@ class cloudera::roles::datanode (
   $cm_api_user       = $cloudera::params::cm_api_user,
   $cm_api_password   = $cloudera::params::cm_api_password,
 ) inherits cloudera::params {
-
-  class { '::cloudera':
-    cm_server_host => $cm_api_host,
-    use_parcels => true
-  }
-  class { '::cloudera::api':
-    require => Class['::cloudera']
-  }
-  class { '::cloudera::api::addhost':
-    cdh_cluster_name => $cdh_cluster_name,
-    cm_api_host => $cm_api_host,
-    require => Class['::cloudera::api']
-  }
   cloudera::api::addrole{'HDFS':
     cdh_cluster_name => $cdh_cluster_name,
     cdh_service_roles => ['DATANODE'],
     cm_api_host => $cm_api_host,
-    require => Class['::cloudera::api::addhost'],
   }
   cloudera::api::configservice{'HDFS':
     cdh_cluster_name => $cdh_cluster_name,

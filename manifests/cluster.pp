@@ -88,6 +88,7 @@ class cloudera::cluster (
         cdh_cluster_major_release => $cdh_cluster_major_release,
         cdh_cluster_parcels_release => $cdh_cluster_parcels_release,
         server_leader => $server_leader,
+        require => Class['::cloudera::api::addhost'],
       }
     } elsif $cdh_cluster_role == 'SERVICENODE_2' {
       class { '::cloudera::roles::servicenode_2':
@@ -98,6 +99,7 @@ class cloudera::cluster (
         cdh_cluster_major_release => $cdh_cluster_major_release,
         cdh_cluster_parcels_release => $cdh_cluster_parcels_release,
         server_leader => $server_leader,
+        require => Class['::cloudera::api::addhost'],
       }
 
     } elsif $cdh_cluster_role == 'DATANODE' {
@@ -109,6 +111,7 @@ class cloudera::cluster (
         cdh_cluster_major_release => $cdh_cluster_major_release,
         cdh_cluster_parcels_release => $cdh_cluster_parcels_release,
         server_leader => $server_leader,
+        require => Class['::cloudera::api::addhost'],
       }
     }
   }

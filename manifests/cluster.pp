@@ -48,7 +48,7 @@ class cloudera::cluster (
     }
     class { '::cloudera::api::createcluster':
       cdh_cluster_name => $cdh_cluster_name,
-      $cdh_cluster_minor_release = $cdh_cluster_minor_release,
+      $cdh_cluster_minor_release => $cdh_cluster_minor_release,
       cm_api_host => $cm_api_host,
       require => Exec['waiting until CM API get ready']
     }

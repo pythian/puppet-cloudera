@@ -2,7 +2,7 @@
   "items" : [ {
     "name" : "<%= @cdh_cluster_name %>",
     "version" : "<%= @cdh_cluster_version %>",
-    "fullVersion" : "<%= @cdh_full_version %>",
-    "parcels" : [{ "product": "CDH", "version": "<%= @cdh_full_version %>", "stage": "ACTIVATED" }]
+    "fullVersion" : "<%= @cdh_cluster_minor_release %>",
+    "parcels" : [{ "product": "CDH", "version": "<%= @cdh_cluster_minor_release %>", "stage": "ACTIVATED" }]
   } ]
 }

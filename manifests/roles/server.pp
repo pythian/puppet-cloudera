@@ -1,5 +1,6 @@
 class cloudera::roles::server (
   $cdh_metadata_dir  = $cloudera::params::cdh_metadata_dir,
+  $server_leader     = $cloudera::params::server_leader,
   $cdh_cluster_name  = $cloudera::params::cdh_cluster_name,
   $cdh_cluster_version  = $cloudera::params::cdh_cluster_version,
   $cdh_cluster_ha    = $cloudera::params::cdh_cluster_ha,

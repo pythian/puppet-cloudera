@@ -1,5 +1,6 @@
 class cloudera::roles::servicenode (
   $file_ensure       = $cloudera::params::file_ensure,
+  $server_leader     = $cloudera::params::server_leader,
   $cdh_metadata_dir  = $cloudera::params::cdh_metadata_dir,
   $cdh_cluster_name  = $cloudera::params::cdh_cluster_name,
   $cdh_cluster_ha    = $cloudera::params::cdh_cluster_ha,

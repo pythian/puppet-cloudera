@@ -41,17 +41,17 @@ class cloudera::cluster (
       }
     }
   } else {
+    exec {'waiting until CM API get ready':
+      command => "/usr/bin/curl -u $cloudera::params::cm_api_user:$cloudera::params::cm_api_password -XGET \"http://$cm_api_host:$cm_api_port/api/v13\"",
+      tries => 6,
+      try_sleep => 300,
+      require => Class['::cloudera'],
+    }
     class { '::cloudera':
       cm_server_host => $cm_api_host,
       install_cmserver => false,
       use_parcels => true,
+      require => Exec['waiting until CM API get ready']
     }
-  }
-
-  exec {'waiting until CM API get ready':
-    command => "/usr/bin/curl -u $cloudera::params::cm_api_user:$cloudera::params::cm_api_password -XGET \"http://$cm_api_host:$cm_api_port/api/v13\"",
-    tries => 6,
-    try_sleep => 300,
-    require => Class['::cloudera'],
   }
 }

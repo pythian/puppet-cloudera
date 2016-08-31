@@ -49,7 +49,7 @@ class cloudera::cluster (
     class { '::cloudera::api::createcluster':
       cdh_cluster_name => $cdh_cluster_name,
       cm_api_host => $cm_api_host,
-      require => Class['waiting until CM API get ready']
+      require => Exec['waiting until CM API get ready']
     }
     class { '::cloudera::api::addhost':
       cdh_cluster_name => $cdh_cluster_name,

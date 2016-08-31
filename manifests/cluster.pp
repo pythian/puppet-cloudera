@@ -110,5 +110,6 @@ class cloudera::cluster (
         cdh_cluster_parcels_release => $cdh_cluster_parcels_release,
         server_leader => $server_leader,
       }
+    }
   }
 }

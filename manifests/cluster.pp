@@ -80,7 +80,7 @@ class cloudera::cluster (
       require => Class['::cloudera']
     }
     if $cdh_cluster_role == 'SERVICENODE_1' {
-      class { '::cloudera::role::servicenode_1'
+      class { '::cloudera::role::servicenode_1':
         cdh_cluster_name => $cdh_cluster_name,
         cm_api_host => $cm_api_host,
         cdh_cluster_ha => $cdh_cluster_ha,
@@ -90,7 +90,7 @@ class cloudera::cluster (
         server_leader => $server_leader,
       }
     } elsif $cdh_cluster_role == 'SERVICENODE_2' {
-      class { '::cloudera::role::servicenode_2'
+      class { '::cloudera::role::servicenode_2':
         cdh_cluster_name => $cdh_cluster_name,
         cm_api_host => $cm_api_host,
         cdh_cluster_ha => $cdh_cluster_ha,
@@ -101,7 +101,7 @@ class cloudera::cluster (
       }
 
     } elsif $cdh_cluster_role == 'DATANODE' {
-      class { '::cloudera::role::datanode'
+      class { '::cloudera::role::datanode':
         cdh_cluster_name => $cdh_cluster_name,
         cm_api_host => $cm_api_host,
         cdh_cluster_ha => $cdh_cluster_ha,

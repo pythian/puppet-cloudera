@@ -29,7 +29,6 @@ class cloudera::roles::servicenode_2 (
       cm_api_host => $cm_api_host,
     }
   } else {
-    #cdh_service_roles => ['NAMENODE','JOURNALNODE','FAILOVERCONTROLLER'],
     cloudera::api::addrole{'HDFS':
       cdh_cluster_name => $cdh_cluster_name,
       cdh_service_roles => ['SECONDARYNAMENODE','JOURNALNODE'],
@@ -56,14 +55,20 @@ class cloudera::roles::servicenode_2 (
       cm_api_host => $cm_api_host,
       require => [Class['cloudera::api::addrole[HDFS]'], Class['cloudera::api::addrole[HBASE]'], Class['cloudera::api::addrole[YARN]'], Class['cloudera::api::addrole[ZOOKEEPER]']],
     }
-    exec {'enable-hdfs-ha':
-      command => "/bin/bash /home/ubuntu/scripts/enable_hdfs_ha.sh $cm_api_host $cdh_cluster_name $fqdn",
-      require => Class['cloudera::api::statusservice[HDFS]'],
-    }
-    class {'cloudera::api::start':
+    class {'::cloudera::api::start':
       cdh_cluster_name => $cdh_cluster_name,
       cm_api_host => $cm_api_host,
-      require => Exec['enable-hdfs-ha'],
+      require => Class['cloudera::api::statusservice[HDFS]'],
+    }
+    cloudera::api::statusservice{'YARN':
+      cdh_cluster_name => $cdh_cluster_name,
+      cdh_service_status => 'STARTED',
+      cm_api_host => $cm_api_host,
+      require => Class['::cloudera::api::start'],
+    }
+    exec {'enable-hdfs-ha':
+      command => "/bin/bash /home/ubuntu/scripts/enable_hdfs_ha.sh $cm_api_host $cdh_cluster_name $fqdn",
+      require => Class['cloudera::api::statusservice[YARN]'],
     }
   }
 }

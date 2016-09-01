@@ -10,7 +10,7 @@ define cloudera::parcels::download (
 ) {
 
   exec { "parcels-download-$parcels_product":
-    command => "/usr/bin/curl -u $cloudera::params::cm_api_user:$cloudera::params::cm_api_password -XPOST \"http://$cm_api_host:$cm_api_port/api/v13/clusters/$cdh_cluster_name/parcels/products/$parcels_product/versions/$parcels_version/commands/startDownload\" > $cdh_metadata_dir/parcels-download-$parcels_product.json.output",
+    command => "/bin/sleep 3 && /usr/bin/curl -u $cloudera::params::cm_api_user:$cloudera::params::cm_api_password -XPOST \"http://$cm_api_host:$cm_api_port/api/v13/clusters/$cdh_cluster_name/parcels/products/$parcels_product/versions/$parcels_version/commands/startDownload\" > $cdh_metadata_dir/parcels-download-$parcels_product.json.output",
     cwd     => "/tmp",
     creates => "$cdh_metadata_dir/parcels-download-$parcels_product.json.output",
     tries   => 3,

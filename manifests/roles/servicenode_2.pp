@@ -50,11 +50,20 @@ class cloudera::roles::servicenode_2 (
       cdh_service_roles => ['SERVER'],
       cm_api_host => $cm_api_host,
     }
-    ::cloudera::api::statusservice{'HDFS':
+    cloudera::api::statusservice{'HDFS':
       cdh_cluster_name => $cdh_cluster_name,
       cdh_service_status => 'STARTED',
       cm_api_host => $cm_api_host,
       require => [Class['cloudera::api::addrole[HDFS]'], Class['cloudera::api::addrole[HBASE]'], Class['cloudera::api::addrole[YARN]'], Class['cloudera::api::addrole[ZOOKEEPER]']],
+    }
+    exec {'enable-hdfs-ha':
+      command => "/bin/bash /home/ubuntu/scripts/enable_hdfs_ha.sh $cm_api_host $cdh_cluster_name $fqdn",
+      require => Class['cloudera::api::statusservice[HDFS]'],
+    }
+    class {'cloudera::api::start':
+      cdh_cluster_name => $cdh_cluster_name,
+      cm_api_host => $cm_api_host,
+      require => Exec['enable-hdfs-ha'],
     }
   }
 }

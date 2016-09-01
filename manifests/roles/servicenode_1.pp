@@ -14,6 +14,7 @@ class cloudera::roles::servicenode_1 (
   $cm_api_password   = $cloudera::params::cm_api_password,
 ) inherits cloudera::params {
   if $cdh_cluster_multi_az == 0 {
+    notify{"Multi-AZ disabled. Value $cdh_cluster_multi_az":}
     if $cdh_cluster_ha == 0 {
       cloudera::api::addrole{'HDFS':
         cdh_cluster_name => $cdh_cluster_name,
@@ -53,6 +54,7 @@ class cloudera::roles::servicenode_1 (
       }
     }
   } else {
+    notify{"Multi-AZ enabled. Value $cdh_cluster_multi_az":}
     if $cdh_cluster_ha == 0 {
       cloudera::api::addrole{'HDFS':
         cdh_cluster_name => $cdh_cluster_name,

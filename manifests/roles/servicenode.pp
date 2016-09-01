@@ -4,6 +4,7 @@ class cloudera::roles::servicenode (
   $cdh_metadata_dir  = $cloudera::params::cdh_metadata_dir,
   $cdh_cluster_name  = $cloudera::params::cdh_cluster_name,
   $cdh_cluster_ha    = $cloudera::params::cdh_cluster_ha,
+  $cdh_cluster_multi_az = $cloudera::params::cdh_cluster_multi_az,
   $cdh_cluster_major_release = $cdh_cluster_major_release,
   $cdh_cluster_minor_release = $cdh_cluster_minor_release,
   $cdh_cluster_parcels_release = $cdh_cluster_parcels_release,

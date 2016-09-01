@@ -46,6 +46,11 @@ class cloudera::cluster (
       try_sleep => 180,
       require => Class['::cloudera'],
     }
+    class { '::cloudera::api::managementservice':
+      cm_api_host => $cm_api_host,
+      cdh_service_roles => ['ACTIVITYMONITOR','ALERTPUBLISHER','EVENTSERVER','HOSTMONITOR','SERVICEMONITOR'],
+      require => Exec['waiting until CM API get ready'],
+    }
     class { '::cloudera::api::createcluster':
       cdh_cluster_name => $cdh_cluster_name,
       cdh_cluster_minor_release => $cdh_cluster_minor_release,
@@ -60,7 +65,7 @@ class cloudera::cluster (
     class { '::cloudera::roles::server':
       cdh_cluster_name => $cdh_cluster_name,
       cm_api_host => $cm_api_host,
-      require => [Class['::cloudera::api::addhost'],Exec['waiting until CM API get ready']],
+      require => Class['::cloudera::api::addhost'],
     }
   } else {
     exec {'waiting for cluster creation':

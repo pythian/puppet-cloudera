@@ -19,10 +19,6 @@ class cloudera::roles::server (
   $cm_db_user        = $cloudera::params::cm_db_user,
   $cm_db_pass        = $cloudera::params::cm_db_pass
 ) inherits cloudera::params {
-  class { '::cloudera::api::managementservice':
-    cm_api_host => $cm_api_host,
-    cdh_service_roles => ['ACTIVITYMONITOR','ALERTPUBLISHER','EVENTSERVER','HOSTMONITOR','SERVICEMONITOR'],
-  }
   cloudera::api::addservice{'ZOOKEEPER':
     cm_api_host => $cm_api_host,
     cdh_cluster_name => $cdh_cluster_name,

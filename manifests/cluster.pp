@@ -5,6 +5,7 @@ class cloudera::cluster (
   $cdh_cluster_role  = $cloudera::params::cdh_cluster_role,
   $cdh_cluster_name  = $cloudera::params::cdh_cluster_name,
   $cdh_cluster_ha    = $cloudera::params::cdh_cluster_ha,
+  $cdh_cluster_multi_az = $cloudera::params::cdh_cluster_multi_az,
   $cdh_cluster_major_release = $cdh_cluster_major_release,
   $cdh_cluster_minor_release = $cdh_cluster_minor_release,
   $cdh_cluster_parcels_release = $cdh_cluster_parcels_release,
@@ -20,7 +21,6 @@ class cloudera::cluster (
   $cm_db_pass        = $cloudera::params::cm_db_pass,
 ) inherits cloudera::params {
   class { '::cloudera::api': }
-
   if $cdh_cluster_role == 'CMSERVER' {
     if $cm_db_remote == 0 {
       class { '::cloudera':
@@ -89,6 +89,7 @@ class cloudera::cluster (
         cdh_cluster_name => $cdh_cluster_name,
         cm_api_host => $cm_api_host,
         cdh_cluster_ha => $cdh_cluster_ha,
+        $cdh_cluster_multi_az = $cloudera::params::cdh_cluster_multi_az,
         cdh_cluster_minor_release => $cdh_cluster_minor_release,
         cdh_cluster_major_release => $cdh_cluster_major_release,
         cdh_cluster_parcels_release => $cdh_cluster_parcels_release,
@@ -100,18 +101,19 @@ class cloudera::cluster (
         cdh_cluster_name => $cdh_cluster_name,
         cm_api_host => $cm_api_host,
         cdh_cluster_ha => $cdh_cluster_ha,
+        $cdh_cluster_multi_az = $cloudera::params::cdh_cluster_multi_az,
         cdh_cluster_minor_release => $cdh_cluster_minor_release,
         cdh_cluster_major_release => $cdh_cluster_major_release,
         cdh_cluster_parcels_release => $cdh_cluster_parcels_release,
         server_leader => $server_leader,
         require => Class['::cloudera::api::addhost'],
       }
-
     } elsif $cdh_cluster_role == 'DATANODE' {
       class { '::cloudera::roles::datanode':
         cdh_cluster_name => $cdh_cluster_name,
         cm_api_host => $cm_api_host,
         cdh_cluster_ha => $cdh_cluster_ha,
+        $cdh_cluster_multi_az = $cloudera::params::cdh_cluster_multi_az,
         cdh_cluster_minor_release => $cdh_cluster_minor_release,
         cdh_cluster_major_release => $cdh_cluster_major_release,
         cdh_cluster_parcels_release => $cdh_cluster_parcels_release,

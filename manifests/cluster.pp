@@ -84,6 +84,7 @@ class cloudera::cluster (
       cm_api_host => $cm_api_host,
       require => Class['::cloudera']
     }
+    notify{"Multi-AZ $cdh_cluster_multi_az":}
     if $cdh_cluster_role == 'SERVICENODE_1' {
       class { '::cloudera::roles::servicenode_1':
         cdh_cluster_name => $cdh_cluster_name,

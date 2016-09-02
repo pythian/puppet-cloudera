@@ -79,11 +79,11 @@ class cloudera::roles::datanode (
         cdh_cluster_name => $cdh_cluster_name,
         cm_api_host => $cm_api_host,
       }
-      ::cloudera::api::statusservice{'ZOOKEEPER':
-        cdh_cluster_name => $cdh_cluster_name,
-        cdh_service_status => 'STARTED',
-        cm_api_host => $cm_api_host,
-      }
+      #::cloudera::api::statusservice{'ZOOKEEPER':
+      #  cdh_cluster_name => $cdh_cluster_name,
+      #  cdh_service_status => 'STARTED',
+      #  cm_api_host => $cm_api_host,
+      #}
       ::cloudera::api::startservice{'HDFS':
         cdh_cluster_name => $cdh_cluster_name,
         cm_api_host => $cm_api_host,

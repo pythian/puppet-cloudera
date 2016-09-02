@@ -64,6 +64,11 @@ class cloudera::roles::servicenode_1 (
         cdh_service_roles => ['RESOURCEMANAGER','JOBHISTORY'],
         cm_api_host => $cm_api_host,
       }
+      cloudera::api::addrole{'HBASE':
+        cdh_cluster_name => $cdh_cluster_name,
+        cdh_service_roles => ['MASTER'],
+        cm_api_host => $cm_api_host,
+      }
       cloudera::api::addrole{'ZOOKEEPER':
         cdh_cluster_name => $cdh_cluster_name,
         cdh_service_roles => ['SERVER'],

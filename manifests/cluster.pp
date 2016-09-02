@@ -67,6 +67,29 @@ class cloudera::cluster (
       cm_api_host => $cm_api_host,
       require => Class['::cloudera::api::addhost'],
     }
+    ::cloudera::parcels::config{"CDH-$cdh_cluster_major_release":
+      cm_api_host => $cm_api_host,
+      items_config => [{ "name" => "REMOTE_PARCEL_REPO_URLS", "value" => "https://archive.cloudera.com/cdh5/parcels/$cdh_cluster_major_release/"}],
+      require => Class['::cloudera::roles::server']
+    }
+    ::cloudera::parcels::download{'CDH':
+      cdh_cluster_name => $cdh_cluster_name,
+      cm_api_host => $cm_api_host,
+      parcels_version => $cdh_cluster_parcels_release,
+      require => Class["cloudera::parcels::config[CDH-$cdh_cluster_major_release]"]
+    }
+    ::cloudera::parcels::distribute{'CDH':
+      cdh_cluster_name => $cdh_cluster_name,
+      cm_api_host => $cm_api_host,
+      parcels_version => $cdh_cluster_parcels_release,
+      require => Class['cloudera::parcels::download[CDH]']
+    }
+    ::cloudera::parcels::activate{'CDH':
+      cdh_cluster_name => $cdh_cluster_name,
+      cm_api_host => $cm_api_host,
+      parcels_version => $cdh_cluster_parcels_release,
+      require => Class['cloudera::parcels::distribute[CDH]']
+    }
   } else {
     exec {'waiting for cluster creation':
       command => "/usr/bin/curl -u $cloudera::params::cm_api_user:$cloudera::params::cm_api_password -XGET \"http://$cm_api_host:$cm_api_port/api/v13/clusters/$cdh_cluster_name\" | grep version",

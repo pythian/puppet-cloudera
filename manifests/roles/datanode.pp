@@ -67,29 +67,6 @@ class cloudera::roles::datanode (
     require => Class['::cloudera::api::addhost'],
   }
   if $server_leader == 0 {
-    ::cloudera::parcels::config{"CDH-$cdh_cluster_major_release":
-      cm_api_host => $cm_api_host,
-      items_config => [{ "name" => "REMOTE_PARCEL_REPO_URLS", "value" => "https://archive.cloudera.com/cdh5/parcels/$cdh_cluster_major_release/"}],
-      require => Class['::cloudera::api::addhost']
-    }
-    ::cloudera::parcels::download{'CDH':
-      cdh_cluster_name => $cdh_cluster_name,
-      cm_api_host => $cm_api_host,
-      parcels_version => $cdh_cluster_parcels_release,
-      require => Class["cloudera::parcels::config[CDH-$cdh_cluster_major_release]"]
-    }
-    ::cloudera::parcels::distribute{'CDH':
-      cdh_cluster_name => $cdh_cluster_name,
-      cm_api_host => $cm_api_host,
-      parcels_version => $cdh_cluster_parcels_release,
-      require => Class['cloudera::parcels::download[CDH]']
-    }
-    ::cloudera::parcels::activate{'CDH':
-      cdh_cluster_name => $cdh_cluster_name,
-      cm_api_host => $cm_api_host,
-      parcels_version => $cdh_cluster_parcels_release,
-      require => Class['cloudera::parcels::distribute[CDH]']
-    }
     if $cdh_cluster_ha == 0 {
       # it should go to out of if block after start of whole cluster works on HA mode
       # currently, start class is commented due to issue when HA CFG is enabled

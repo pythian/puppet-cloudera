@@ -90,7 +90,7 @@ class cloudera::cluster (
       parcels_version => $cdh_cluster_parcels_release,
       require => Class['cloudera::parcels::distribute[CDH]'],
     }
-    class {'::cloudera::api::startcluster':
+    class {'::cloudera::api::start':
       cdh_cluster_name => $cdh_cluster_name,
       cm_api_host => $cm_api_host,
       require => Class['cloudera::parcels::activate[CDH]'],

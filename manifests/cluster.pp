@@ -90,6 +90,22 @@ class cloudera::cluster (
       parcels_version => $cdh_cluster_parcels_release,
       require => Class['cloudera::parcels::distribute[CDH]']
     }
+    class {'::cloudera::api::start':
+      cdh_cluster_name => $cdh_cluster_name,
+      cm_api_host => $cm_api_host,
+    }
+    cloudera::api::statusservice{'YARN':
+      cdh_cluster_name => $cdh_cluster_name,
+      cdh_service_status => 'STARTED',
+      cm_api_host => $cm_api_host,
+      require => Class['::cloudera::api::start'],
+    }
+    if $cdh_cluster_ha > 0 {
+      exec {'enable-hdfs-ha':
+        command => "/bin/bash /home/ubuntu/scripts/enable_hdfs_ha.sh $cm_api_host $cdh_cluster_name $fqdn",
+        require => Class['cloudera::api::statusservice[YARN]'],
+      }
+    }
   } else {
     exec {'waiting for cluster creation':
       command => "/usr/bin/curl -u $cloudera::params::cm_api_user:$cloudera::params::cm_api_password -XGET \"http://$cm_api_host:$cm_api_port/api/v13/clusters/$cdh_cluster_name\" | grep version",

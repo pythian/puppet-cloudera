@@ -73,24 +73,20 @@ class cloudera::roles::datanode (
       class {'::cloudera::api::start':
         cdh_cluster_name => $cdh_cluster_name,
         cm_api_host => $cm_api_host,
-        require => Class['cloudera::parcels::activate[CDH]']
       }
     } else {
       ::cloudera::api::startservice{'ZOOKEEPER':
         cdh_cluster_name => $cdh_cluster_name,
         cm_api_host => $cm_api_host,
-        require => Class['cloudera::parcels::activate[CDH]']
       }
       ::cloudera::api::statusservice{'ZOOKEEPER':
         cdh_cluster_name => $cdh_cluster_name,
         cdh_service_status => 'STARTED',
         cm_api_host => $cm_api_host,
-        require => Class['cloudera::api::startservice[ZOOKEEPER]']
       }
       ::cloudera::api::startservice{'HDFS':
         cdh_cluster_name => $cdh_cluster_name,
         cm_api_host => $cm_api_host,
-        require => Class['cloudera::parcels::activate[CDH]']
       }
     }
     #class {'::cloudera::api::start':

@@ -38,7 +38,7 @@ define cloudera::api::startservice (
 ) {
 
   exec { "start service $cdh_cluster_service":
-    command => "/usr/bin/curl -H 'Content-Type: application/json' -u $cloudera::params::cm_api_user:$cloudera::params::cm_api_password -XPOST \"http://$cm_api_host:$cm_api_port/api/v13/clusters/$cdh_cluster_name/services/$cdh_cluster_service/commands/firstRun\" > $cdh_metadata_dir/$cdh_cluster_service-started.lock",
+    command => "/usr/bin/curl -H 'Content-Type: application/json' -u $cm_api_user:$cm_api_password -XPOST \"http://$cm_api_host:$cm_api_port/api/v13/clusters/$cdh_cluster_name/services/$cdh_cluster_service/commands/firstRun\" > $cdh_metadata_dir/$cdh_cluster_service-started.lock",
     cwd     => "/tmp",
     creates => "$cdh_metadata_dir/$cdh_cluster_service-started.lock",
     tries   => 3,

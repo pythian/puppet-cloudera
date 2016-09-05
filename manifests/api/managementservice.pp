@@ -37,7 +37,7 @@ class cloudera::api::managementservice (
 ) {
 
   exec { "add CM MGMT":
-    command => "/usr/bin/curl -H 'Content-Type: application/json' -u $cloudera::params::cm_api_user:$cloudera::params::cm_api_password -XPUT \"http://$cm_api_host:$cm_api_port/api/v1/cm/service\" -d '{}' && touch /var/tmp/CM-MGMT.lock",
+    command => "/usr/bin/curl -H 'Content-Type: application/json' -u $cm_api_user:$cm_api_password -XPUT \"http://$cm_api_host:$cm_api_port/api/v13/cm/service\" -d '{}' && touch /var/tmp/CM-MGMT.lock",
     cwd     => "/tmp",
     creates => "/var/tmp/CM-MGMT.lock",
     tries   => 3,
@@ -51,7 +51,7 @@ class cloudera::api::managementservice (
   }
 
   exec { "add role for CM":
-    command => "/usr/bin/curl -H 'Content-Type: application/json' -u $cloudera::params::cm_api_user:$cloudera::params::cm_api_password -XPOST \"http://$cm_api_host:$cm_api_port/api/v1/cm/service/roles\" -d @CM-roles.json && touch /var/tmp/CM-roles.lock",
+    command => "/usr/bin/curl -H 'Content-Type: application/json' -u $cm_api_user:$cm_api_password -XPOST \"http://$cm_api_host:$cm_api_port/api/v13/cm/service/roles\" -d @CM-roles.json && touch /var/tmp/CM-roles.lock",
     cwd     => "/tmp",
     creates => "/var/tmp/CM-roles.lock",
     require => [File["CM-roles.json"],Exec["add CM MGMT"]],
@@ -60,7 +60,7 @@ class cloudera::api::managementservice (
   }
 
   exec { "start CM MGMT":
-    command => "/usr/bin/curl -H 'Content-Type: application/json' -u $cloudera::params::cm_api_user:$cloudera::params::cm_api_password -XPOST \"http://$cm_api_host:$cm_api_port/api/v1/cm/service/commands/start\" && touch /var/tmp/CM-MGMT-started.lock",
+    command => "/usr/bin/curl -H 'Content-Type: application/json' -u $cm_api_user:$cm_api_password -XPOST \"http://$cm_api_host:$cm_api_port/api/v13/cm/service/commands/start\" && touch /var/tmp/CM-MGMT-started.lock",
     cwd     => "/tmp",
     creates => "/var/tmp/CM-MGMT-started.lock",
     tries   => 3,

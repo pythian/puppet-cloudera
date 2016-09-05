@@ -51,6 +51,10 @@ class cloudera::cluster (
       cdh_service_roles => ['ACTIVITYMONITOR','ALERTPUBLISHER','EVENTSERVER','HOSTMONITOR','SERVICEMONITOR'],
       require => Exec['waiting until CM API get ready'],
     }
+    exec { 'configure-activity-monitor-db':
+      command => "/bin/bash /home/ubuntu/scripts/configure_activity_monitor_db.sh $cm_api_host $cm_api_port $cm_api_user $cm_api_pass",
+      require => Class['::cloudera::api::managementservice'],
+    }
     class { '::cloudera::api::createcluster':
       cdh_cluster_name => $cdh_cluster_name,
       cdh_cluster_minor_release => $cdh_cluster_minor_release,

@@ -41,7 +41,7 @@ class cloudera::cluster (
       }
     }
     exec {'waiting until CM API get ready':
-      command => "/usr/bin/curl -u $cloudera::params::cm_api_user:$cloudera::params::cm_api_password -XGET \"http://$cm_api_host:$cm_api_port/api/v13\"",
+      command => "/usr/bin/curl -u $cm_api_user:$cm_api_password -XGET \"http://$cm_api_host:$cm_api_port/api/v13\"",
       tries => 10,
       try_sleep => 180,
       require => Class['::cloudera'],
@@ -52,7 +52,7 @@ class cloudera::cluster (
       require => Exec['waiting until CM API get ready'],
     }
     exec { 'configure-activity-monitor-db':
-      command => "/bin/bash /home/ubuntu/scripts/configure_activity_monitor_db.sh $cm_api_host $cm_api_port $cm_api_user $cm_api_pass",
+      command => "/bin/bash /home/ubuntu/scripts/configure_activity_monitor_db.sh $cm_api_host $cm_api_port $cm_api_user $cm_api_password",
       require => Class['::cloudera::api::managementservice'],
     }
     class { '::cloudera::api::createcluster':

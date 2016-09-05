@@ -80,7 +80,7 @@ class cloudera::cluster (
       cdh_cluster_name => $cdh_cluster_name,
       cm_api_host => $cm_api_host,
       parcels_version => $cdh_cluster_parcels_release,
-      require => Class["cloudera::parcels::config[CDH-$cdh_cluster_major_release]"],
+      require => [Class["cloudera::parcels::config[CDH-$cdh_cluster_major_release]"],Exec['configure-activity-monitor-db']],
     }
     ::cloudera::parcels::distribute{'CDH':
       cdh_cluster_name => $cdh_cluster_name,

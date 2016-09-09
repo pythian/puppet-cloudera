@@ -32,13 +32,17 @@ class cloudera::roles::datanode (
     cm_api_host => $cm_api_host,
     require => Class['cloudera::api::addrole[HDFS]']
   }
-  cloudera::api::configroletype{'HDFS-DN':
-    cdh_cluster_name => $cdh_cluster_name,
-    cdh_cluster_service => 'HDFS',
-    cdh_service_roletype => 'DATANODE',
-    items_config => [{ "name" => "dfs_data_dir_list", "value" => "/dfs/hdfs/datanode"}],
-    cm_api_host => $cm_api_host,
-    require => Class['cloudera::api::addrole[HDFS]']
+  #cloudera::api::configroletype{'HDFS-DN':
+  #  cdh_cluster_name => $cdh_cluster_name,
+  #  cdh_cluster_service => 'HDFS',
+  #  cdh_service_roletype => 'DATANODE',
+  #  items_config => [{ "name" => "dfs_data_dir_list", "value" => "/dfs/hdfs/datanode"}],
+  #  cm_api_host => $cm_api_host,
+  #  require => Class['cloudera::api::addrole[HDFS]']
+  #}
+  exec {'configure-hdfs-disks':
+    command => "/bin/bash /home/ubuntu/scripts/hdfs_disks.sh $cm_api_host $cm_api_port $cm_api_user $cm_api_password $cdh_cluster_name",
+    require => Class['cloudera::api::addrole[HDFS]'],
   }
   cloudera::api::configroletype{'HDFS-SNN':
     cdh_cluster_name => $cdh_cluster_name,

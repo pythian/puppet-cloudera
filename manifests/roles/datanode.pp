@@ -41,7 +41,8 @@ class cloudera::roles::datanode (
   #  require => Class['cloudera::api::addrole[HDFS]']
   #}
   exec {'configure-hdfs-disks':
-    command => "/bin/bash /home/ubuntu/scripts/hdfs_disks.sh $cm_api_host $cm_api_port $cm_api_user $cm_api_password $cdh_cluster_name",
+    command => "/bin/bash /home/ubuntu/scripts/hdfs_disks.sh $cm_api_host $cm_api_port $cm_api_user $cm_api_password $cdh_cluster_name > $cdh_metadata_dir/disks",
+    creates => "$cdh_metadata_dir/disks",
     require => Class['cloudera::api::addrole[HDFS]'],
   }
   cloudera::api::configroletype{'HDFS-SNN':

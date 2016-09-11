@@ -34,7 +34,7 @@ class cloudera::roles::datanode (
     command => "/usr/bin/curl -u $cm_api_user:$cm_api_password -XGET \"http://$cm_api_host:$cm_api_port/api/v13/clusters/$cdh_cluster_name/parcels/products/CDH/versions/$cdh_cluster_parcels_release\" | grep ACTIVATED",
     tries => 15,
     try_sleep => 60,
-    require => Class['cloudera::api::addrole[ZOOKEEPER]'],
+    require => [Class['cloudera::api::addrole[HDFS]'],Class['cloudera::api::addrole[HBASE]'],Class['cloudera::api::addrole[YARN]'],],
   }
   exec {'configure-hdfs-disks':
     command => "/bin/bash /home/ubuntu/scripts/hdfs_disks.sh $cm_api_host $cm_api_port $cm_api_user $cm_api_password $cdh_cluster_name > $cdh_metadata_dir/disks",

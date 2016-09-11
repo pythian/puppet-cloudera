@@ -30,4 +30,8 @@ class cloudera::roles::servicenode (
     cm_api_host => $cm_api_host,
     require => Class['::cloudera::api::addhost'],
   }
+  Class{'cloudera::api::zookeeperInit':
+    cdh_cluster_name => $cdh_cluster_name,
+    cm_api_host => $cm_api_host,
+  }
 }

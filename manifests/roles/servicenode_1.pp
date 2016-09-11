@@ -78,6 +78,11 @@ class cloudera::roles::servicenode_1 (
         cdh_service_roles => ['SERVER'],
         cm_api_host => $cm_api_host,
       }
+      exec { "wait-activation-complete-$parcels_product":
+        command => "/usr/bin/curl -u $cm_api_user:$cm_api_password -XGET \"http://$cm_api_host:$cm_api_port/api/v13/clusters/$cdh_cluster_name/parcels/products/$parcels_product/versions/$parcels_version\" | grep ACTIVATED",
+        tries => 15,
+        try_sleep => 60,
+      }
       class{'cloudera::api::zookeeperInit':
         cdh_cluster_name => $cdh_cluster_name,
         cm_api_host => $cm_api_host,
@@ -102,6 +107,11 @@ class cloudera::roles::servicenode_1 (
         cdh_cluster_name => $cdh_cluster_name,
         cdh_service_roles => ['SERVER'],
         cm_api_host => $cm_api_host,
+      }
+      exec { "wait-activation-complete-$parcels_product":
+        command => "/usr/bin/curl -u $cm_api_user:$cm_api_password -XGET \"http://$cm_api_host:$cm_api_port/api/v13/clusters/$cdh_cluster_name/parcels/products/$parcels_product/versions/$parcels_version\" | grep ACTIVATED",
+        tries => 15,
+        try_sleep => 60,
       }
       class{'cloudera::api::zookeeperInit':
         cdh_cluster_name => $cdh_cluster_name,

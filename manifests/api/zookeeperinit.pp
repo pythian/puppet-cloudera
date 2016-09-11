@@ -1,4 +1,4 @@
-# == Class: cloudera::api::zookeeperInit
+# == Class: cloudera::api::zookeeperinit
 #
 # This class handles installing and configuring the Cloudera Manager Server.
 #
@@ -15,7 +15,7 @@
 #
 # === Sample Usage:
 #
-#  class { '::cloudera::api::zookeeperInit': }
+#  class { '::cloudera::api::zookeeperinit': }
 #
 # === Authors:
 #
@@ -24,7 +24,7 @@
 #
 #
 
-class cloudera::api::zookeeperInit (
+class cloudera::api::zookeeperinit (
   $cdh_metadata_dir  = $cloudera::params::cdh_metadata_dir,
   $cdh_cluster_name  = $cloudera::params::cdh_cluster_name,
   $cm_api_host       = $cloudera::params::cm_api_host,

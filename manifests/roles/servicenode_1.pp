@@ -36,7 +36,7 @@ class cloudera::roles::servicenode_1 (
         try_sleep => 60,
         require => Class['cloudera::api::addrole[ZOOKEEPER]'],
       }
-      class{'cloudera::api::zookeeperInit':
+      class{'::cloudera::api::zookeeperInit':
         cdh_cluster_name => $cdh_cluster_name,
         cm_api_host => $cm_api_host,
         require => Exec["wait-parcels"],
@@ -68,7 +68,7 @@ class cloudera::roles::servicenode_1 (
         try_sleep => 60,
         require => Class['cloudera::api::addrole[ZOOKEEPER]'],
       }
-      class{'cloudera::api::zookeeperInit':
+      class{'::cloudera::api::zookeeperInit':
         cdh_cluster_name => $cdh_cluster_name,
         cm_api_host => $cm_api_host,
         require => Exec["wait-parcels"],
@@ -102,7 +102,7 @@ class cloudera::roles::servicenode_1 (
         try_sleep => 60,
         require => Class['cloudera::api::addrole[ZOOKEEPER]'],
       }
-      class{'cloudera::api::zookeeperInit':
+      class{'::cloudera::api::zookeeperInit':
         cdh_cluster_name => $cdh_cluster_name,
         cm_api_host => $cm_api_host,
         require => Exec["wait-parcels"],
@@ -134,7 +134,7 @@ class cloudera::roles::servicenode_1 (
         try_sleep => 60,
         require => Class['cloudera::api::addrole[ZOOKEEPER]'],
       }
-      class{'cloudera::api::zookeeperInit':
+      class{'::cloudera::api::zookeeperInit':
         cdh_cluster_name => $cdh_cluster_name,
         cm_api_host => $cm_api_host,
         require => Exec["wait-parcels"],

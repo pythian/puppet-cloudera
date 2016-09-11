@@ -51,6 +51,10 @@ class cloudera::roles::servicenode_2 (
         cdh_service_roles => ['SERVER'],
         cm_api_host => $cm_api_host,
       }
+      class{'cloudera::api::zookeeperInit':
+        cdh_cluster_name => $cdh_cluster_name,
+        cm_api_host => $cm_api_host,
+      }
     }
   } else {
     if $cdh_cluster_ha == 0 {
@@ -67,6 +71,10 @@ class cloudera::roles::servicenode_2 (
       cloudera::api::addrole{'ZOOKEEPER':
         cdh_cluster_name => $cdh_cluster_name,
         cdh_service_roles => ['SERVER'],
+        cm_api_host => $cm_api_host,
+      }
+      class{'cloudera::api::zookeeperInit':
+        cdh_cluster_name => $cdh_cluster_name,
         cm_api_host => $cm_api_host,
       }
     } else {
@@ -88,6 +96,10 @@ class cloudera::roles::servicenode_2 (
       cloudera::api::addrole{'ZOOKEEPER':
         cdh_cluster_name => $cdh_cluster_name,
         cdh_service_roles => ['SERVER'],
+        cm_api_host => $cm_api_host,
+      }
+      class{'cloudera::api::zookeeperInit':
+        cdh_cluster_name => $cdh_cluster_name,
         cm_api_host => $cm_api_host,
       }
     }

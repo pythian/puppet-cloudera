@@ -31,7 +31,7 @@ class cloudera::roles::servicenode (
     require => Class['::cloudera::api::addhost'],
   }
   exec { "wait-parcels":
-    command => "/usr/bin/curl -u $cm_api_user:$cm_api_password -XGET \"http://$cm_api_host:$cm_api_port/api/v13/clusters/$cdh_cluster_name/parcels/products/CDH/versions/$cdh_cluster_parcels_release,\" | egrep 'DISTRIBUTED|ACTIVATING|ACTIVATED'",
+    command => "/usr/bin/curl -u $cm_api_user:$cm_api_password -XGET \"http://$cm_api_host:$cm_api_port/api/v13/clusters/$cdh_cluster_name/parcels/products/CDH/versions/$cdh_cluster_parcels_release\" | grep ACTIVATED",
     tries => 15,
     try_sleep => 60,
     require => Class['cloudera::api::addrole[ZOOKEEPER]'],

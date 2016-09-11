@@ -18,57 +18,42 @@ class cloudera::roles::datanode (
     cdh_service_roles => ['DATANODE'],
     cm_api_host => $cm_api_host,
   }
-  cloudera::api::configservice{'HDFS':
-    cdh_cluster_name => $cdh_cluster_name,
-    items_config => [{ "name" => "zookeeper_service", "value" => "ZOOKEEPER"}],
-    cm_api_host => $cm_api_host,
-    require => Class['cloudera::api::addrole[HDFS]'],
-  }
-  cloudera::api::configroletype{'HDFS-NN':
-    cdh_cluster_name => $cdh_cluster_name,
-    cdh_cluster_service => 'HDFS',
-    cdh_service_roletype => 'NAMENODE',
-    items_config => [{ "name" => "dfs_name_dir_list", "value" => "/dfs/hdfs/namenode"}],
-    cm_api_host => $cm_api_host,
-    require => Class['cloudera::api::addrole[HDFS]']
-  }
-  #cloudera::api::configroletype{'HDFS-DN':
-  #  cdh_cluster_name => $cdh_cluster_name,
-  #  cdh_cluster_service => 'HDFS',
-  #  cdh_service_roletype => 'DATANODE',
-  #  items_config => [{ "name" => "dfs_data_dir_list", "value" => "/dfs/hdfs/datanode"}],
-  #  cm_api_host => $cm_api_host,
-  #  require => Class['cloudera::api::addrole[HDFS]']
-  #}
-  exec {'configure-hdfs-disks':
-    command => "/bin/bash /home/ubuntu/scripts/hdfs_disks.sh $cm_api_host $cm_api_port $cm_api_user $cm_api_password $cdh_cluster_name > $cdh_metadata_dir/disks",
-    creates => "$cdh_metadata_dir/disks",
-    require => Class['cloudera::api::addrole[HDFS]'],
-  }
-  cloudera::api::configroletype{'HDFS-SNN':
-    cdh_cluster_name => $cdh_cluster_name,
-    cdh_cluster_service => 'HDFS',
-    cdh_service_roletype => 'SECONDARYNAMENODE',
-    items_config => [{ "name" => "fs_checkpoint_dir_list", "value" => "/dfs/hdfs/secondarynamenode"}],
-    cm_api_host => $cm_api_host,
-    require => Class['cloudera::api::addrole[HDFS]']
-  }
   cloudera::api::addrole{'HBASE':
     cdh_cluster_name => $cdh_cluster_name,
     cdh_service_roles => ['REGIONSERVER'],
     cm_api_host => $cm_api_host,
     require => Class['::cloudera::api::addhost'],
   }
-  cloudera::api::configservice{'HBASE':
-    cdh_cluster_name => $cdh_cluster_name,
-    items_config => [{ "name" => "hdfs_rootdir", "value" => "/HBASE"},{ "name" => "zookeeper_service", "value" => "ZOOKEEPER"},{ "name" => "hdfs_service", "value" => "HDFS"}],
-    cm_api_host => $cm_api_host,
-    require => Class['cloudera::api::addrole[HBASE]']
-  }
   cloudera::api::addrole{'YARN':
     cdh_cluster_name => $cdh_cluster_name,
     cdh_service_roles => ['NODEMANAGER'],
     cm_api_host => $cm_api_host,
     require => Class['::cloudera::api::addhost'],
+  }
+  exec { 'wait-parcels':
+    command => "/usr/bin/curl -u $cm_api_user:$cm_api_password -XGET \"http://$cm_api_host:$cm_api_port/api/v13/clusters/$cdh_cluster_name/parcels/products/CDH/versions/$cdh_cluster_parcels_release\" | grep ACTIVATED",
+    tries => 15,
+    try_sleep => 60,
+    require => Class['cloudera::api::addrole[ZOOKEEPER]'],
+  }
+  exec {'configure-hdfs-disks':
+    command => "/bin/bash /home/ubuntu/scripts/hdfs_disks.sh $cm_api_host $cm_api_port $cm_api_user $cm_api_password $cdh_cluster_name > $cdh_metadata_dir/disks",
+    creates => "$cdh_metadata_dir/disks",
+    require => Exec['wait-parcels'],
+  }
+  cloudera::api::startservice{'HBASE':
+    cdh_cluster_name => $cdh_cluster_name,
+    cm_api_host => $cm_api_host,
+    require => Exec['wait-parcels'],
+  }
+  cloudera::api::startservice{'HDFS':
+    cdh_cluster_name => $cdh_cluster_name,
+    cm_api_host => $cm_api_host,
+    require => Exec['configure-hdfs-disks'],
+  }
+  cloudera::api::startservice{'YARN':
+    cdh_cluster_name => $cdh_cluster_name,
+    cm_api_host => $cm_api_host,
+    require => Exec['wait-parcels'],
   }
 }

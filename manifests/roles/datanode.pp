@@ -41,19 +41,4 @@ class cloudera::roles::datanode (
     creates => "$cdh_metadata_dir/disks",
     require => Exec['wait-parcels'],
   }
-  cloudera::api::startservice{'HBASE':
-    cdh_cluster_name => $cdh_cluster_name,
-    cm_api_host => $cm_api_host,
-    require => Exec['wait-parcels'],
-  }
-  cloudera::api::startservice{'HDFS':
-    cdh_cluster_name => $cdh_cluster_name,
-    cm_api_host => $cm_api_host,
-    require => Exec['configure-hdfs-disks'],
-  }
-  cloudera::api::startservice{'YARN':
-    cdh_cluster_name => $cdh_cluster_name,
-    cm_api_host => $cm_api_host,
-    require => Exec['wait-parcels'],
-  }
 }

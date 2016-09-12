@@ -99,11 +99,27 @@ class cloudera::cluster (
       cm_api_host => $cm_api_host,
       require => Class['cloudera::parcels::activate[CDH]'],
     }
+    file {'/nfs':
+      ensure => directory,
+    }
+    file {'/nfs/namenode':
+      ensure => directory,
+      require => File['/nfs'],
+    }
+    class { '::nfs':
+      server_enabled => true,
+      require => File['/nfs/namenode'],
+    }
+    nfs::server::export{'/nfs/namenode':
+      ensure  => 'mounted',
+      clients => '*(rw,async,no_root_squash) localhost(rw)',
+      require => Class['::nfs'],
+    }
     cloudera::api::statusservice{'YARN':
       cdh_cluster_name => $cdh_cluster_name,
       cdh_service_status => 'STARTED',
       cm_api_host => $cm_api_host,
-      require => [Class['::cloudera::api::start'],Class['cloudera::parcels::activate[CDH]']],
+      require => [Class['nfs::server::export[/nfs/namenode]'],Class['::cloudera::api::start'],Class['cloudera::parcels::activate[CDH]']],
     }
     if $cdh_cluster_ha > 0 {
       exec {'enable-hdfs-ha':

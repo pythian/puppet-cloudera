@@ -20,22 +20,6 @@ class cloudera::roles::server (
   $cm_db_user        = $cloudera::params::cm_db_user,
   $cm_db_pass        = $cloudera::params::cm_db_pass
 ) inherits cloudera::params {
-  file {'/nfs':
-    ensure => directory,
-  }
-  file {'/nfs/namenode':
-    ensure => directory,
-    require => File['/nfs'],
-  }
-  class { '::nfs':
-    server_enabled => true,
-    require => File['/nfs/namenode'],
-  }
-  nfs::server::export{'/nfs/namenode':
-    ensure  => 'mounted',
-    clients => '*(rw,async,no_root_squash) localhost(rw)',
-    require => Class['::nfs'],
-  }
   cloudera::api::addservice{'ZOOKEEPER':
     cm_api_host => $cm_api_host,
     cdh_cluster_name => $cdh_cluster_name,

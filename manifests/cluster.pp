@@ -43,7 +43,7 @@ class cloudera::cluster (
         cm_server_host => $cm_api_host,
         install_cmserver => true,
         use_parcels => true,
-        require => Service['nfsd'],
+        require => Service['nfs-kernel-server'],
       }
     } else {
       class { '::cloudera':
@@ -55,7 +55,7 @@ class cloudera::cluster (
         db_port => $cm_db_port,
         db_user => $cm_db_user,
         db_pass => $cm_db_pass,
-        require => Service['nfsd'],
+        require => Service['nfs-kernel-server'],
       }
     }
     exec {'waiting until CM API get ready':

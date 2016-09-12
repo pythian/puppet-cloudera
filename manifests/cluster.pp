@@ -22,11 +22,28 @@ class cloudera::cluster (
 ) inherits cloudera::params {
   class { '::cloudera::api': }
   if $cdh_cluster_role == 'CMSERVER' {
+    file {'/nfs':
+      ensure => directory,
+    }
+    file {'/nfs/namenode':
+      ensure => directory,
+      require => File['/nfs'],
+    }
+    class { '::nfs':
+      server_enabled => true,
+      require => File['/nfs/namenode'],
+    }
+    nfs::server::export{'/nfs/namenode':
+      ensure  => 'mounted',
+      clients => '*(rw,async,no_root_squash) localhost(rw)',
+      require => Class['::nfs'],
+    }
     if $cm_db_remote == 0 {
       class { '::cloudera':
         cm_server_host => $cm_api_host,
         install_cmserver => true,
         use_parcels => true,
+        require => Class['nfs::server::export[/nfs/namenode]'],
       }
     } else {
       class { '::cloudera':
@@ -38,6 +55,7 @@ class cloudera::cluster (
         db_port => $cm_db_port,
         db_user => $cm_db_user,
         db_pass => $cm_db_pass,
+        require => Class['nfs::server::export[/nfs/namenode]'],
       }
     }
     exec {'waiting until CM API get ready':
@@ -99,27 +117,11 @@ class cloudera::cluster (
       cm_api_host => $cm_api_host,
       require => Class['cloudera::parcels::activate[CDH]'],
     }
-    file {'/nfs':
-      ensure => directory,
-    }
-    file {'/nfs/namenode':
-      ensure => directory,
-      require => File['/nfs'],
-    }
-    class { '::nfs':
-      server_enabled => true,
-      require => File['/nfs/namenode'],
-    }
-    nfs::server::export{'/nfs/namenode':
-      ensure  => 'mounted',
-      clients => '*(rw,async,no_root_squash) localhost(rw)',
-      require => Class['::nfs'],
-    }
     cloudera::api::statusservice{'YARN':
       cdh_cluster_name => $cdh_cluster_name,
       cdh_service_status => 'STARTED',
       cm_api_host => $cm_api_host,
-      require => [Class['nfs::server::export[/nfs/namenode]'],Class['::cloudera::api::start'],Class['cloudera::parcels::activate[CDH]']],
+      require => [Class['::cloudera::api::start'],Class['cloudera::parcels::activate[CDH]']],
     }
     if $cdh_cluster_ha > 0 {
       exec {'enable-hdfs-ha':

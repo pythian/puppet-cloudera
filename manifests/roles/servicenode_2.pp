@@ -16,7 +16,21 @@ class cloudera::roles::servicenode_2 (
   class { '::nfs':
     client_enabled => true,
   }
-  Nfs::Client::Mount <<| |>>
+  file {'/nfs':
+    ensure => directory,
+  }
+  file {'/nfs/namenode':
+    ensure => directory,
+    require => File['/nfs'],
+  }
+  mount { '/nfs/namenode':
+    device  => "$cm_api_host:/nfs/namenode",
+    fstype  => "nfs",
+    ensure  => "mounted",
+    options => "defaults",
+    atboot  => true,
+    require => File['/nfs/namenode']
+  }
   if $cdh_cluster_multi_az == 0 {
     if $cdh_cluster_ha == 0 {
       cloudera::api::addrole{'HDFS':

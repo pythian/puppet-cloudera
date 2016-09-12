@@ -31,7 +31,7 @@ class cloudera::roles::server (
     server_enabled => true,
     require => File['/nfs/namenode'],
   }
-  nfs::server::export{ '/nfs/namenode':
+  nfs::server::export{'/nfs/namenode':
     ensure  => 'mounted',
     clients => '0.0.0.0/0(rw,async,no_root_squash) localhost(rw)',
     require => Class['::nfs'],
@@ -39,17 +39,17 @@ class cloudera::roles::server (
   cloudera::api::addservice{'ZOOKEEPER':
     cm_api_host => $cm_api_host,
     cdh_cluster_name => $cdh_cluster_name,
-    require => Class['nfs::server::export'],
+    require => Class['nfs::server::export[/nfs/namenode]'],
   }
   cloudera::api::addservice{'HDFS':
     cm_api_host => $cm_api_host,
     cdh_cluster_name => $cdh_cluster_name,
-    require => Class['nfs::server::export'],
+    require => Class['nfs::server::export[/nfs/namenode]'],
   }
   cloudera::api::addservice{'HBASE':
     cm_api_host => $cm_api_host,
     cdh_cluster_name => $cdh_cluster_name,
-    require => Class['nfs::server::export'],
+    require => Class['nfs::server::export[/nfs/namenode]'],
   }
   cloudera::api::addservice{'YARN':
     cm_api_host => $cm_api_host,

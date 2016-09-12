@@ -36,11 +36,6 @@ class cloudera::roles::server (
     clients => '0.0.0.0/0(rw,async,no_root_squash) localhost(rw)',
     require => Class['::nfs'],
   }
-  # need to review it later
-  exec {'start nfsd':
-    command => '/etc/init.d/nfs-kernel-server start > $cdh_metadata_dir/nfsd-started.lock',
-    requires => Class['::nfs'],
-  }
   cloudera::api::addservice{'ZOOKEEPER':
     cm_api_host => $cm_api_host,
     cdh_cluster_name => $cdh_cluster_name,

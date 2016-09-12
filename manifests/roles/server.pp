@@ -39,7 +39,7 @@ class cloudera::roles::server (
   # need to review it later
   exec {'start nfsd':
     command => '/etc/init.d/nfs-kernel-server start > $cdh_metadata_dir/nfsd-started.lock',
-    require => Class['::nfs'],
+    requires => Class['::nfs'],
   }
   cloudera::api::addservice{'ZOOKEEPER':
     cm_api_host => $cm_api_host,

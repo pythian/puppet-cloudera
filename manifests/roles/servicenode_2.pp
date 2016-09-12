@@ -29,7 +29,7 @@ class cloudera::roles::servicenode_2 (
     ensure  => "mounted",
     options => "defaults",
     atboot  => true,
-    require => File['/nfs/namenode']
+    require => File['/nfs/namenode'],
   }
   if $cdh_cluster_multi_az == 0 {
     if $cdh_cluster_ha == 0 {

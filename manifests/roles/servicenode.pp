@@ -29,7 +29,7 @@ class cloudera::roles::servicenode (
     ensure  => "mounted",
     options => "defaults",
     atboot  => true,
-    require => File['/nfs/namenode']
+    require => File['/nfs/namenode'],
   }
   cloudera::api::addrole{'HDFS':
     cdh_cluster_name => $cdh_cluster_name,

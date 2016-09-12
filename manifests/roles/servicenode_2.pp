@@ -13,11 +13,6 @@ class cloudera::roles::servicenode_2 (
   $cm_api_user       = $cloudera::params::cm_api_user,
   $cm_api_password   = $cloudera::params::cm_api_password,
 ) inherits cloudera::params {
-  class {'::nfs::server':
-    nfs_v4 = true,
-    nfs_v4_export_root_clients => '0.0.0.0/0(rw,fsid=root,insecure,no_subtree_check,async,no_root_squash)',
-  }
-  Nfs::Client::Mount <<| |>>
   if $cdh_cluster_multi_az == 0 {
     if $cdh_cluster_ha == 0 {
       cloudera::api::addrole{'HDFS':

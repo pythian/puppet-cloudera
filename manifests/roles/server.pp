@@ -33,7 +33,7 @@ class cloudera::roles::server (
   }
   nfs::server::export{'/nfs/namenode':
     ensure  => 'mounted',
-    clients => '0.0.0.0/0(rw,async,no_root_squash) localhost(rw)',
+    clients => '*(rw,async,no_root_squash) localhost(rw)',
     require => Class['::nfs'],
   }
   cloudera::api::addservice{'ZOOKEEPER':

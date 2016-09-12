@@ -91,6 +91,27 @@ class cloudera::roles::server (
     cm_api_host => $cm_api_host,
     require => Class['cloudera::api::addservice[HDFS]'],
   }
+  file {'/nfs':
+    ensure => directory,
+    owner => root,
+    group => root,
+    mode => 0770,
+  }
+  file {'/nfs/namenode':
+    ensure => directory,
+    owner => root,
+    group => root,
+    mode => 0770,
+    require => File['/nfs']
+  }
+  class {'::nfs::server':
+    nfs_v4 = true,
+    nfs_v4_export_root_clients => '0.0.0.0/0(rw,fsid=root,insecure,no_subtree_check,async,no_root_squash)',
+  }
+  nfs::server::export{'/nfs/namenode':
+    ensure => 'mounted',
+    clients => '0.0.0.0/0(rw,fsid=root,insecure,no_subtree_check,async,no_root_squash)',
+  }
   cloudera::api::configrolegroup{'HDFS-NAMENODE-BASE':
     cdh_cluster_name => $cdh_cluster_name,
     cdh_cluster_service => 'HDFS',

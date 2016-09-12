@@ -13,6 +13,8 @@ class cloudera::roles::servicenode_2 (
   $cm_api_user       = $cloudera::params::cm_api_user,
   $cm_api_password   = $cloudera::params::cm_api_password,
 ) inherits cloudera::params {
+  include nfs::client
+  Nfs::Client::Mount <<| |>>
   if $cdh_cluster_multi_az == 0 {
     if $cdh_cluster_ha == 0 {
       cloudera::api::addrole{'HDFS':

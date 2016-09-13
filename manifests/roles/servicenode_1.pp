@@ -13,24 +13,6 @@ class cloudera::roles::servicenode_1 (
   $cm_api_user       = $cloudera::params::cm_api_user,
   $cm_api_password   = $cloudera::params::cm_api_password,
 ) inherits cloudera::params {
-  class { '::nfs':
-    client_enabled => true,
-  }
-  file {'/nfs':
-    ensure => directory,
-  }
-  file {'/nfs/namenode':
-    ensure => directory,
-    require => File['/nfs'],
-  }
-  mount { '/nfs/namenode':
-    device  => "$cm_api_host:/nfs/namenode",
-    fstype  => "nfs",
-    ensure  => "mounted",
-    options => "defaults",
-    atboot  => true,
-    require => File['/nfs/namenode'],
-  }
   if $cdh_cluster_multi_az == 0 {
     if $cdh_cluster_ha == 0 {
       cloudera::api::addrole{'HDFS':

@@ -13,16 +13,6 @@ class cloudera::roles::servicenode (
   $cm_api_user       = $cloudera::params::cm_api_user,
   $cm_api_password   = $cloudera::params::cm_api_password,
 ) inherits cloudera::params {
-  class { '::nfs':
-    client_enabled => true,
-  }
-  file {'/nfs':
-    ensure => directory,
-  }
-  file {'/nfs/namenode':
-    ensure => directory,
-    require => File['/nfs'],
-  }
   cloudera::api::addrole{'HDFS':
     cdh_cluster_name => $cdh_cluster_name,
     cdh_service_roles => ['SECONDARYNAMENODE'],
@@ -45,14 +35,6 @@ class cloudera::roles::servicenode (
     tries => 15,
     try_sleep => 60,
     require => Class['cloudera::api::addrole[ZOOKEEPER]'],
-  }
-  mount { '/nfs/namenode':
-    device  => "$cm_api_host:/nfs/namenode",
-    fstype  => "nfs",
-    ensure  => "mounted",
-    options => "defaults",
-    atboot  => true,
-    require => [Exec['wait-parcels'],File['/nfs/namenode'],],
   }
   class{'::cloudera::api::zookeeperinit':
     cdh_cluster_name => $cdh_cluster_name,

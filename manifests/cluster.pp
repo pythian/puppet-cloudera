@@ -46,25 +46,6 @@ class cloudera::cluster (
         require => Service['nfs-kernel-server'],
       }
     } else {
-      file {'/nfs':
-      ensure => directory,
-      }
-      file {'/nfs/namenode':
-        ensure => directory,
-        require => File['/nfs'],
-      }
-      class { '::nfs':
-        client_enabled => true,
-        require => File['/nfs/namenode'],
-      }
-      mount { '/nfs/namenode':
-        device  => "$cm_api_host:/nfs/namenode",
-        fstype  => "nfs",
-        ensure  => "mounted",
-        options => "defaults",
-        atboot  => true,
-        require => File['/nfs/namenode'],
-      }
       class { '::cloudera':
         cm_server_host => $cm_api_host,
         install_cmserver => true,

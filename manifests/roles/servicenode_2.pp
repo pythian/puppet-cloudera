@@ -13,22 +13,44 @@ class cloudera::roles::servicenode_2 (
   $cm_api_user       = $cloudera::params::cm_api_user,
   $cm_api_password   = $cloudera::params::cm_api_password,
 ) inherits cloudera::params {
+  file {'/nfs':
+    ensure => directory,
+  }
+  file {'/nfs/namenode':
+    ensure => directory,
+    require => File['/nfs'],
+  }
+  class { '::nfs':
+    client_enabled => true,
+    require => File['/nfs/namenode'],
+  }
+  mount { '/nfs/namenode':
+    device  => "$cm_api_host:/nfs/namenode",
+    fstype  => "nfs",
+    ensure  => "mounted",
+    options => "defaults",
+    atboot  => true,
+    require => File['/nfs/namenode'],
+  }
   if $cdh_cluster_multi_az == 0 {
     if $cdh_cluster_ha == 0 {
       cloudera::api::addrole{'HDFS':
         cdh_cluster_name => $cdh_cluster_name,
         cdh_service_roles => ['SECONDARYNAMENODE','JOURNALNODE'],
         cm_api_host => $cm_api_host,
+        require => Mount['/nfs/namenode'],
       }
       cloudera::api::addrole{'YARN':
         cdh_cluster_name => $cdh_cluster_name,
         cdh_service_roles => ['RESOURCEMANAGER','JOBHISTORY'],
         cm_api_host => $cm_api_host,
+        require => Mount['/nfs/namenode'],
       }
       cloudera::api::addrole{'ZOOKEEPER':
         cdh_cluster_name => $cdh_cluster_name,
         cdh_service_roles => ['SERVER'],
         cm_api_host => $cm_api_host,
+        require => Mount['/nfs/namenode'],
       }
       exec { 'wait-parcels':
         command => "/usr/bin/curl -u $cm_api_user:$cm_api_password -XGET \"http://$cm_api_host:$cm_api_port/api/v13/clusters/$cdh_cluster_name/parcels/products/CDH/versions/$cdh_cluster_parcels_release\" | grep ACTIVATED",
@@ -46,21 +68,25 @@ class cloudera::roles::servicenode_2 (
         cdh_cluster_name => $cdh_cluster_name,
         cdh_service_roles => ['SECONDARYNAMENODE','JOURNALNODE'],
         cm_api_host => $cm_api_host,
+        require => Mount['/nfs/namenode'],
       }
       cloudera::api::addrole{'HBASE':
         cdh_cluster_name => $cdh_cluster_name,
         cdh_service_roles => ['MASTER'],
         cm_api_host => $cm_api_host,
+        require => Mount['/nfs/namenode'],
       }
       cloudera::api::addrole{'YARN':
         cdh_cluster_name => $cdh_cluster_name,
         cdh_service_roles => ['RESOURCEMANAGER','JOBHISTORY'],
         cm_api_host => $cm_api_host,
+        require => Mount['/nfs/namenode'],
       }
       cloudera::api::addrole{'ZOOKEEPER':
         cdh_cluster_name => $cdh_cluster_name,
         cdh_service_roles => ['SERVER'],
         cm_api_host => $cm_api_host,
+        require => Mount['/nfs/namenode'],
       }
       exec { 'wait-parcels':
         command => "/usr/bin/curl -u $cm_api_user:$cm_api_password -XGET \"http://$cm_api_host:$cm_api_port/api/v13/clusters/$cdh_cluster_name/parcels/products/CDH/versions/$cdh_cluster_parcels_release\" | grep ACTIVATED",
@@ -80,16 +106,19 @@ class cloudera::roles::servicenode_2 (
         cdh_cluster_name => $cdh_cluster_name,
         cdh_service_roles => ['SECONDARYNAMENODE','JOURNALNODE'],
         cm_api_host => $cm_api_host,
+        require => Mount['/nfs/namenode'],
       }
       cloudera::api::addrole{'YARN':
         cdh_cluster_name => $cdh_cluster_name,
         cdh_service_roles => ['RESOURCEMANAGER','JOBHISTORY'],
         cm_api_host => $cm_api_host,
+        require => Mount['/nfs/namenode'],
       }
       cloudera::api::addrole{'ZOOKEEPER':
         cdh_cluster_name => $cdh_cluster_name,
         cdh_service_roles => ['SERVER'],
         cm_api_host => $cm_api_host,
+        require => Mount['/nfs/namenode'],
       }
       exec { 'wait-parcels':
         command => "/usr/bin/curl -u $cm_api_user:$cm_api_password -XGET \"http://$cm_api_host:$cm_api_port/api/v13/clusters/$cdh_cluster_name/parcels/products/CDH/versions/$cdh_cluster_parcels_release\" | grep ACTIVATED",
@@ -107,21 +136,25 @@ class cloudera::roles::servicenode_2 (
         cdh_cluster_name => $cdh_cluster_name,
         cdh_service_roles => ['SECONDARYNAMENODE','JOURNALNODE'],
         cm_api_host => $cm_api_host,
+        require => Mount['/nfs/namenode'],
       }
       cloudera::api::addrole{'HBASE':
         cdh_cluster_name => $cdh_cluster_name,
         cdh_service_roles => ['MASTER'],
         cm_api_host => $cm_api_host,
+        require => Mount['/nfs/namenode'],
       }
       cloudera::api::addrole{'YARN':
         cdh_cluster_name => $cdh_cluster_name,
         cdh_service_roles => ['RESOURCEMANAGER','JOBHISTORY'],
         cm_api_host => $cm_api_host,
+        require => Mount['/nfs/namenode'],
       }
       cloudera::api::addrole{'ZOOKEEPER':
         cdh_cluster_name => $cdh_cluster_name,
         cdh_service_roles => ['SERVER'],
         cm_api_host => $cm_api_host,
+        require => Mount['/nfs/namenode'],
       }
       exec { 'wait-parcels':
         command => "/usr/bin/curl -u $cm_api_user:$cm_api_password -XGET \"http://$cm_api_host:$cm_api_port/api/v13/clusters/$cdh_cluster_name/parcels/products/CDH/versions/$cdh_cluster_parcels_release\" | grep ACTIVATED",

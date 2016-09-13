@@ -134,7 +134,6 @@ class cloudera::cluster (
       command => "/usr/bin/curl -u $cm_api_user:$cm_api_password -XGET \"http://$cm_api_host:$cm_api_port/api/v13/clusters/$cdh_cluster_name\" | grep version",
       tries => 10,
       try_sleep => 180,
-      require => Mount['/nfs/namenode'],
     }
     class { '::cloudera':
       cm_server_host => $cm_api_host,

@@ -39,6 +39,11 @@ class cloudera::api::addhost (
     try_sleep => 10
   }
 
+  exec {'update-host-rack':
+    command => "/bin/bash /home/ubuntu/scripts/configure_rack.sh $cm_api_host $cm_api_port $cm_api_user $cm_api_password > $cdh_metadata_dir/host-rack.json.output",
+    creates => "$cdh_metadata_dir/host-rack.json.output",
+  }
+
   file { 'host.json':
     ensure  => $file_ensure,
     path    => '/tmp/host.json',

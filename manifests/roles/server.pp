@@ -98,7 +98,7 @@ class cloudera::roles::server (
     cdh_cluster_name => $cdh_cluster_name,
     cdh_cluster_service => 'HDFS',
     cdh_service_rolegroup => 'HDFS-NAMENODE-BASE',
-    items_config => [{ "name" => "dfs_name_dir_list", "value" => ["/nfs/namenode","/dfs/namenode"] }],
+    items_config => [{ "name" => "dfs_name_dir_list", "value" => "/nfs/namenode,/dfs/namenode" }],
     cm_api_host => $cm_api_host,
     require => Class['cloudera::api::addservice[HDFS]'],
   }

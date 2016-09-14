@@ -60,8 +60,8 @@ class cloudera::cluster (
     }
     exec {'waiting until CM API get ready':
       command => "/usr/bin/curl -u $cm_api_user:$cm_api_password -XGET \"http://$cm_api_host:$cm_api_port/api/v13\"",
-      tries => 10,
-      try_sleep => 180,
+      tries => 30,
+      try_sleep => 60,
       require => Class['::cloudera'],
     }
     class { '::cloudera::api::managementservice':
@@ -132,8 +132,8 @@ class cloudera::cluster (
   } else {
     exec {'waiting for cluster creation':
       command => "/usr/bin/curl -u $cm_api_user:$cm_api_password -XGET \"http://$cm_api_host:$cm_api_port/api/v13/clusters/$cdh_cluster_name\" | grep version",
-      tries => 10,
-      try_sleep => 180,
+      tries => 30,
+      try_sleep => 60,
     }
     class { '::cloudera':
       cm_server_host => $cm_api_host,

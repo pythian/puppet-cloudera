@@ -20,20 +20,35 @@ class cloudera::roles::server (
   $cm_db_user        = $cloudera::params::cm_db_user,
   $cm_db_pass        = $cloudera::params::cm_db_pass
 ) inherits cloudera::params {
-  cloudera::api::addservice{'ZOOKEEPER':
-    cm_api_host => $cm_api_host,
-    cdh_cluster_name => $cdh_cluster_name,
-    require => Class['nfs::server::export[/nfs/namenode]'],
-  }
-  cloudera::api::addservice{'HDFS':
-    cm_api_host => $cm_api_host,
-    cdh_cluster_name => $cdh_cluster_name,
-    require => Class['nfs::server::export[/nfs/namenode]'],
-  }
-  cloudera::api::addservice{'HBASE':
-    cm_api_host => $cm_api_host,
-    cdh_cluster_name => $cdh_cluster_name,
-    require => Class['nfs::server::export[/nfs/namenode]'],
+  if $cdh_cluster_ha == 0 {
+    cloudera::api::addservice{'ZOOKEEPER':
+      cm_api_host => $cm_api_host,
+      cdh_cluster_name => $cdh_cluster_name,
+      require => Class['nfs::server::export[/nfs/namenode]'],
+    }
+    cloudera::api::addservice{'HDFS':
+      cm_api_host => $cm_api_host,
+      cdh_cluster_name => $cdh_cluster_name,
+      require => Class['nfs::server::export[/nfs/namenode]'],
+    }
+    cloudera::api::addservice{'HBASE':
+      cm_api_host => $cm_api_host,
+      cdh_cluster_name => $cdh_cluster_name,
+      require => Class['nfs::server::export[/nfs/namenode]'],
+    }
+  } else {
+    cloudera::api::addservice{'ZOOKEEPER':
+      cm_api_host => $cm_api_host,
+      cdh_cluster_name => $cdh_cluster_name,
+    }
+    cloudera::api::addservice{'HDFS':
+      cm_api_host => $cm_api_host,
+      cdh_cluster_name => $cdh_cluster_name,
+    }
+    cloudera::api::addservice{'HBASE':
+      cm_api_host => $cm_api_host,
+      cdh_cluster_name => $cdh_cluster_name,
+    }
   }
   cloudera::api::addservice{'YARN':
     cm_api_host => $cm_api_host,

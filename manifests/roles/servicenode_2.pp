@@ -95,11 +95,6 @@ class cloudera::roles::servicenode_2 (
         try_sleep => 60,
         require => Class['cloudera::api::addrole[ZOOKEEPER]'],
       }
-      exec {'change-nfs-permission':
-        command => "/bin/chown -R hdfs:hadoop /nfs/namenode && touch $cdh_metadata_dir/nfs-permission.lock",
-        creates => "$cdh_metadata_dir/nfs-permission.lock",
-        require => Exec['wait-parcels'],
-      }
       class{'::cloudera::api::zookeeperinit':
         cdh_cluster_name => $cdh_cluster_name,
         cm_api_host => $cm_api_host,
@@ -187,11 +182,6 @@ class cloudera::roles::servicenode_2 (
         tries => 15,
         try_sleep => 60,
         require => Class['cloudera::api::addrole[ZOOKEEPER]'],
-      }
-      exec {'change-nfs-permission':
-        command => "/bin/chown -R hdfs:hadoop /nfs/namenode && touch $cdh_metadata_dir/nfs-permission.lock",
-        creates => "$cdh_metadata_dir/nfs-permission.lock",
-        require => Exec['wait-parcels'],
       }
       class{'::cloudera::api::zookeeperinit':
         cdh_cluster_name => $cdh_cluster_name,

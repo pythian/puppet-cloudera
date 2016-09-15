@@ -39,24 +39,44 @@ class cloudera::cluster (
         clients => '*(rw,async,no_root_squash) localhost(rw)',
         require => Class['::nfs'],
       }
-    }
-    if $cm_db_remote == 0 {
-      class { '::cloudera':
-        cm_server_host => $cm_api_host,
-        install_cmserver => true,
-        use_parcels => true,
-        require => Service['nfs-kernel-server'],
+      if $cm_db_remote == 0 {
+        class { '::cloudera':
+          cm_server_host => $cm_api_host,
+          install_cmserver => true,
+          use_parcels => true,
+          require => Service['nfs-kernel-server'],
+        }
+      } else {
+        class { '::cloudera':
+          cm_server_host => $cm_api_host,
+          install_cmserver => true,
+          use_parcels => true,
+          db_type => $cm_db_type,
+          db_host => $cm_db_host,
+          db_port => $cm_db_port,
+          db_user => $cm_db_user,
+          db_pass => $cm_db_pass,
+          require => Service['nfs-kernel-server'],
+        }
       }
     } else {
-      class { '::cloudera':
-        cm_server_host => $cm_api_host,
-        install_cmserver => true,
-        use_parcels => true,
-        db_type => $cm_db_type,
-        db_host => $cm_db_host,
-        db_port => $cm_db_port,
-        db_user => $cm_db_user,
-        db_pass => $cm_db_pass,
+      if $cm_db_remote == 0 {
+        class { '::cloudera':
+          cm_server_host => $cm_api_host,
+          install_cmserver => true,
+          use_parcels => true,
+        }
+      } else {
+        class { '::cloudera':
+          cm_server_host => $cm_api_host,
+          install_cmserver => true,
+          use_parcels => true,
+          db_type => $cm_db_type,
+          db_host => $cm_db_host,
+          db_port => $cm_db_port,
+          db_user => $cm_db_user,
+          db_pass => $cm_db_pass,
+        }
       }
     }
     exec {'waiting until CM API get ready':

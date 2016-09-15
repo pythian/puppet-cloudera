@@ -73,7 +73,7 @@ class cloudera::cluster (
     }
     exec { 'configure-activity-monitor-db':
       command => "/bin/bash /home/ubuntu/scripts/configure_activity_monitor_db.sh $cm_api_host $cm_api_port $cm_api_user $cm_api_password > $cdh_metadata_dir/activity_monitor_db_config.json.output",
-      creates => '$cdh_metadata_dir/activity_monitor_db_config.json.output',
+      creates => "$cdh_metadata_dir/activity_monitor_db_config.json.output",
       require => Class['::cloudera::api::managementservice'],
     }
     class { '::cloudera::api::createcluster':

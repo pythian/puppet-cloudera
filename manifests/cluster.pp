@@ -22,21 +22,23 @@ class cloudera::cluster (
 ) inherits cloudera::params {
   class { '::cloudera::api': }
   if $cdh_cluster_role == 'CMSERVER' {
-    file {'/nfs':
-      ensure => directory,
-    }
-    file {'/nfs/namenode':
-      ensure => directory,
-      require => File['/nfs'],
-    }
-    class { '::nfs':
-      server_enabled => true,
-      require => File['/nfs/namenode'],
-    }
-    nfs::server::export{'/nfs/namenode':
-      ensure  => 'mounted',
-      clients => '*(rw,async,no_root_squash) localhost(rw)',
-      require => Class['::nfs'],
+    if $cdh_cluster_ha == 0 {
+      file {'/nfs':
+        ensure => directory,
+      }
+      file {'/nfs/namenode':
+        ensure => directory,
+        require => File['/nfs'],
+      }
+      class { '::nfs':
+        server_enabled => true,
+        require => File['/nfs/namenode'],
+      }
+      nfs::server::export{'/nfs/namenode':
+        ensure  => 'mounted',
+        clients => '*(rw,async,no_root_squash) localhost(rw)',
+        require => Class['::nfs'],
+      }
     }
     if $cm_db_remote == 0 {
       class { '::cloudera':
@@ -55,7 +57,7 @@ class cloudera::cluster (
         db_port => $cm_db_port,
         db_user => $cm_db_user,
         db_pass => $cm_db_pass,
-        require => Mount['/nfs/namenode'],
+        require => Service['nfs-kernel-server'],
       }
     }
     exec {'waiting until CM API get ready':
@@ -70,7 +72,8 @@ class cloudera::cluster (
       require => Exec['waiting until CM API get ready'],
     }
     exec { 'configure-activity-monitor-db':
-      command => "/bin/bash /home/ubuntu/scripts/configure_activity_monitor_db.sh $cm_api_host $cm_api_port $cm_api_user $cm_api_password",
+      command => "/bin/bash /home/ubuntu/scripts/configure_activity_monitor_db.sh $cm_api_host $cm_api_port $cm_api_user $cm_api_password > $cdh_metadata_dir/activity_monitor_db_config.json.output",
+      creates => '$cdh_metadata_dir/activity_monitor_db_config.json.output',
       require => Class['::cloudera::api::managementservice'],
     }
     class { '::cloudera::api::createcluster':

@@ -42,7 +42,7 @@ class cloudera::roles::servicenode_2 (
       }
       cloudera::api::addrole{'MAPREDUCE':
         cdh_cluster_name => $cdh_cluster_name,
-        cdh_service_roles => ['JOBTRACKER'],
+        cdh_service_roles => ['JOBTRACKER','FAILOVERCONTROLLER'],
         cm_api_host => $cm_api_host,
         require => Mount['/nfs/namenode'],
       }
@@ -169,7 +169,7 @@ class cloudera::roles::servicenode_2 (
       }
       cloudera::api::addrole{'MAPREDUCE':
         cdh_cluster_name => $cdh_cluster_name,
-        cdh_service_roles => ['JOBTRACKER'],
+        cdh_service_roles => ['JOBTRACKER','FAILOVERCONTROLLER'],
         cm_api_host => $cm_api_host,
       }
       cloudera::api::addrole{'ZOOKEEPER':

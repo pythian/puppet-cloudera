@@ -139,7 +139,7 @@ class cloudera::cluster (
       cm_api_host => $cm_api_host,
       require => Class['cloudera::parcels::activate[CDH]'],
     }
-    cloudera::api::statusservice{'YARN':
+    cloudera::api::statusservice{'HBASE':
       cdh_cluster_name => $cdh_cluster_name,
       cdh_service_status => 'STARTED',
       cm_api_host => $cm_api_host,
@@ -148,7 +148,7 @@ class cloudera::cluster (
     if $cdh_cluster_ha > 0 {
       exec {'enable-hdfs-ha':
         command => "/bin/bash /home/ubuntu/scripts/enable_hdfs_ha.sh $cm_api_host $cdh_cluster_name",
-        require => Class['cloudera::api::statusservice[YARN]'],
+        require => Class['cloudera::api::statusservice[HBASE]'],
       }
     }
   } else {

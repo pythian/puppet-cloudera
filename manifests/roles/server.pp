@@ -50,7 +50,7 @@ class cloudera::roles::server (
       cdh_cluster_name => $cdh_cluster_name,
     }
   }
-  cloudera::api::addservice{'YARN':
+  cloudera::api::addservice{'MAPREDUCE':
     cm_api_host => $cm_api_host,
     cdh_cluster_name => $cdh_cluster_name,
     require => Class['::cloudera::api::addhost']
@@ -73,25 +73,11 @@ class cloudera::roles::server (
     cm_api_host => $cm_api_host,
     require => Class['cloudera::api::addservice[HBASE]']
   }
-  cloudera::api::configservice{'YARN':
-    cdh_cluster_name => $cdh_cluster_name,
-    items_config => [{ "name" => "hdfs_service", "value" => "HDFS"},{ "name" => "zookeeper_service", "value" => "ZOOKEEPER"}],
-    cm_api_host => $cm_api_host,
-    require => Class['cloudera::api::addservice[YARN]'],
-  }
   cloudera::api::configservice{'HDFS':
     cdh_cluster_name => $cdh_cluster_name,
     items_config => [{ "name" => "zookeeper_service", "value" => "ZOOKEEPER"}],
     cm_api_host => $cm_api_host,
     require => Class['cloudera::api::addrole[HDFS]'],
-  }
-  cloudera::api::configrolegroup{'YARN':
-    cdh_cluster_name => $cdh_cluster_name,
-    cdh_cluster_service => 'YARN',
-    cdh_service_rolegroup => 'YARN-NODEMANAGER-BASE',
-    items_config => [{ "name" => "yarn_nodemanager_local_dirs", "value" => "/dfs/yarn/nodemanager"}],
-    cm_api_host => $cm_api_host,
-    require => Class['cloudera::api::addservice[YARN]'],
   }
   cloudera::api::configrolegroup{'HDFS-JOURNALNODE-BASE':
     cdh_cluster_name => $cdh_cluster_name,

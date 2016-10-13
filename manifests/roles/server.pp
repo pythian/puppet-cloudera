@@ -88,8 +88,16 @@ class cloudera::roles::server (
   cloudera::api::configrolegroup{'MAPREDUCE':
     cdh_cluster_name => $cdh_cluster_name,
     cdh_cluster_service => 'MAPREDUCE',
-    cdh_service_rolegroup => 'MAPREDUCE-BASE',
+    cdh_service_rolegroup => 'MAPREDUCE-JOBTRACKER-BASE',
     items_config => [{ "name" => "mapred_local_dir", "value" => "/dfs/mapreduce/jobtracker"}],
+    cm_api_host => $cm_api_host,
+    require => Class['cloudera::api::addservice[MAPREDUCE]'],
+  }
+  cloudera::api::configrolegroup{'MAPREDUCE':
+    cdh_cluster_name => $cdh_cluster_name,
+    cdh_cluster_service => 'MAPREDUCE',
+    cdh_service_rolegroup => 'MAPREDUCE-TASKTRACKER-BASE',
+    items_config => [{ "name" => "mapred_local_dir", "value" => "/dfs/mapreduce/tasktracker"}],
     cm_api_host => $cm_api_host,
     require => Class['cloudera::api::addservice[MAPREDUCE]'],
   }

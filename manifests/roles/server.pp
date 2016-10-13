@@ -91,7 +91,7 @@ class cloudera::roles::server (
     cdh_service_rolegroup => 'MAPREDUCE-BASE',
     items_config => [{ "name" => "mapred_local_dir", "value" => "/dfs/mapreduce/jobtracker"}],
     cm_api_host => $cm_api_host,
-    require => Class['cloudera::api::addservice[YARN]'],
+    require => Class['cloudera::api::addservice[MAPREDUCE]'],
   }
   cloudera::api::configrolegroup{'HDFS-JOURNALNODE-BASE':
     cdh_cluster_name => $cdh_cluster_name,

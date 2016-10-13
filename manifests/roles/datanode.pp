@@ -24,9 +24,9 @@ class cloudera::roles::datanode (
     cm_api_host => $cm_api_host,
     require => Class['::cloudera::api::addhost'],
   }
-  cloudera::api::addrole{'YARN':
+  cloudera::api::addrole{'MAPREDUCE':
     cdh_cluster_name => $cdh_cluster_name,
-    cdh_service_roles => ['NODEMANAGER'],
+    cdh_service_roles => ['TASKTRACKER'],
     cm_api_host => $cm_api_host,
     require => Class['::cloudera::api::addhost'],
   }

@@ -40,9 +40,9 @@ class cloudera::roles::servicenode_2 (
         cm_api_host => $cm_api_host,
         require => Mount['/nfs/namenode'],
       }
-      cloudera::api::addrole{'YARN':
+      cloudera::api::addrole{'MAPREDUCE':
         cdh_cluster_name => $cdh_cluster_name,
-        cdh_service_roles => ['RESOURCEMANAGER','JOBHISTORY'],
+        cdh_service_roles => ['JOBTRACKER'],
         cm_api_host => $cm_api_host,
         require => Mount['/nfs/namenode'],
       }
@@ -79,9 +79,9 @@ class cloudera::roles::servicenode_2 (
         cdh_service_roles => ['MASTER'],
         cm_api_host => $cm_api_host,
       }
-      cloudera::api::addrole{'YARN':
+      cloudera::api::addrole{'MAPREDUCE':
         cdh_cluster_name => $cdh_cluster_name,
-        cdh_service_roles => ['RESOURCEMANAGER','JOBHISTORY'],
+        cdh_service_roles => ['JOBTRACKER'],
         cm_api_host => $cm_api_host,
       }
       cloudera::api::addrole{'ZOOKEEPER':
@@ -128,9 +128,9 @@ class cloudera::roles::servicenode_2 (
         cm_api_host => $cm_api_host,
         require => Mount['/nfs/namenode'],
       }
-      cloudera::api::addrole{'YARN':
+      cloudera::api::addrole{'MAPREDUCE':
         cdh_cluster_name => $cdh_cluster_name,
-        cdh_service_roles => ['RESOURCEMANAGER','JOBHISTORY'],
+        cdh_service_roles => ['JOBTRACKER'],
         cm_api_host => $cm_api_host,
         require => Mount['/nfs/namenode'],
       }
@@ -167,9 +167,9 @@ class cloudera::roles::servicenode_2 (
         cdh_service_roles => ['MASTER'],
         cm_api_host => $cm_api_host,
       }
-      cloudera::api::addrole{'YARN':
+      cloudera::api::addrole{'MAPREDUCE':
         cdh_cluster_name => $cdh_cluster_name,
-        cdh_service_roles => ['RESOURCEMANAGER','JOBHISTORY'],
+        cdh_service_roles => ['JOBTRACKER'],
         cm_api_host => $cm_api_host,
       }
       cloudera::api::addrole{'ZOOKEEPER':

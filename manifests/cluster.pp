@@ -18,7 +18,9 @@ class cloudera::cluster (
   $cm_db_host        = $cloudera::params::cm_db_host,
   $cm_db_port        = $cloudera::params::cm_db_port,
   $cm_db_user        = $cloudera::params::cm_db_user,
+  $cm_db_masteruser  = $cloudera::params::cm_db_masteruser,
   $cm_db_pass        = $cloudera::params::cm_db_pass,
+  $cm_db_masterpass  = $cloudera::params::cm_db_masterpass,
 ) inherits cloudera::params {
   class { '::cloudera::api': }
   if $cdh_cluster_role == 'CMSERVER' {
@@ -53,9 +55,9 @@ class cloudera::cluster (
           use_parcels => true,
           db_type => $cm_db_type,
           db_host => $cm_db_host,
-          db_port => $cm_db_port,
-          db_user => $cm_db_user,
-          db_pass => $cm_db_pass,
+          db_port => 3306,
+          db_user => $cm_db_masteruser,
+          db_pass => $cm_db_masterpass,
           require => Service['nfs-kernel-server'],
         }
       }
@@ -73,9 +75,9 @@ class cloudera::cluster (
           use_parcels => true,
           db_type => $cm_db_type,
           db_host => $cm_db_host,
-          db_port => $cm_db_port,
-          db_user => $cm_db_user,
-          db_pass => $cm_db_pass,
+          db_port => 3306,
+          db_user => $cm_db_masteruser,
+          db_pass => $cm_db_masterpass,
         }
       }
     }

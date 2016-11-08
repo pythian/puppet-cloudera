@@ -13,7 +13,8 @@ class cloudera::cluster (
   $cm_api_port       = $cloudera::params::cm_api_port,
   $cm_api_user       = $cloudera::params::cm_api_user,
   $cm_api_password   = $cloudera::params::cm_api_password,
-  $cm_db_remote      = $cloudera::params::cm_db_remote,
+  $cm_db_local       = $cloudera::params::cm_db_local,
+  $cm_db_rds         = $cloudera::params::cm_db_rds,
   $cm_db_type        = $cloudera::params::cm_db_type,
   $cm_db_host        = $cloudera::params::cm_db_host,
   $cm_db_port        = $cloudera::params::cm_db_port,
@@ -41,7 +42,7 @@ class cloudera::cluster (
         clients => '*(rw,async,no_root_squash) localhost(rw)',
         require => Class['::nfs'],
       }
-      if $cm_db_remote == 0 {
+      if $cm_db_local == 0 {
         class { '::cloudera':
           cm_server_host => $cm_api_host,
           install_cmserver => true,
@@ -60,15 +61,23 @@ class cloudera::cluster (
           db_pass => $cm_db_masterpass,
           require => Service['nfs-kernel-server'],
         }
+
       }
     } else {
-      if $cm_db_remote == 0 {
+      if $cm_db_local == 0 {
         class { '::cloudera':
           cm_server_host => $cm_api_host,
           install_cmserver => true,
           use_parcels => true,
         }
       } else {
+        if $cm_db_rds == 0 {
+          if $cm_db_type == "mysql" {
+            class { '::mysql::server': root_password => $cm_db_master_password, remove_default_accounts => true }
+            mysql_user{ "$cm_db_user@%": ensure => present, password_hash => mysql_password("$cm_db_pass")}
+            mysql_grant{ "$cm_db_user@%/$cm_db_name.*": user => "$cm_db_user@%", table => "$cm_db_name.*", privileges => ['ALL']}
+          }
+        }
         class { '::cloudera':
           cm_server_host => $cm_api_host,
           install_cmserver => true,

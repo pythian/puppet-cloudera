@@ -24,6 +24,9 @@ class cloudera::cluster (
   $cm_db_masterpass  = $cloudera::params::cm_db_masterpass,
 ) inherits cloudera::params {
   class { '::cloudera::api': }
+  debug("DB Local: $cm_db_local")
+  debug("RDS: $cm_db_rds")
+  debug("Type: $cm_db_type")
   if $cdh_cluster_role == 'CMSERVER' {
     if $cdh_cluster_ha == 0 {
       file {'/nfs':

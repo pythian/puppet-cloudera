@@ -15,6 +15,7 @@ class cloudera::cluster (
   $cm_api_password   = $cloudera::params::cm_api_password,
   $cm_db_local       = $cloudera::params::cm_db_local,
   $cm_db_rds         = $cloudera::params::cm_db_rds,
+  $cm_db_embedded    = $cloudera::params::cm_db_embedded,
   $cm_db_type        = $cloudera::params::cm_db_type,
   $cm_db_host        = $cloudera::params::cm_db_host,
   $cm_db_port        = $cloudera::params::cm_db_port,
@@ -49,7 +50,7 @@ class cloudera::cluster (
         clients => '*(rw,async,no_root_squash) localhost(rw)',
         require => Class['::nfs'],
       }
-      if $cm_db_local == 0 {
+      if $cm_db_embedded == 1 {
         class { '::cloudera':
           cm_server_host => $cm_api_host,
           install_cmserver => true,
@@ -83,7 +84,7 @@ class cloudera::cluster (
         }
       }
     } else {
-      if $cm_db_local == 0 {
+      if $cm_db_embedded == 1 {
         class { '::cloudera':
           cm_server_host => $cm_api_host,
           install_cmserver => true,

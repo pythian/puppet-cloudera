@@ -79,7 +79,7 @@ class cloudera::cluster (
           db_port => $cm_db_port,
           db_user => $cm_db_masteruser,
           db_pass => $cm_db_masterpass,
-          require => Class['::mysql::server'],
+          require => Class['mysql::server'],
         }
       }
     } else {

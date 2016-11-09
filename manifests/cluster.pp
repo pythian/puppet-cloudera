@@ -62,26 +62,38 @@ class cloudera::cluster (
           if $cm_db_type == "mysql" {
             class { 'mysql::server': root_password => $cm_db_masterpass, remove_default_accounts => true, require => Service['nfs-kernel-server'], }
             mysql_user{ "$cm_db_user@%": ensure => present, password_hash => mysql_password("$cm_db_pass"), require => Class['::mysql::server'], }
+            mysql_grant{ "$cm_db_user@%/$cm_db_name.*": user => "$cm_db_user@%", table => "$cm_db_name.*", privileges => ['ALL'], require => Class["mysql_user[$cm_db_user@%]"], }
+            class { '::cloudera':
+              cm_server_host => $cm_api_host,
+              install_cmserver => true,
+              use_parcels => true,
+              db_type => $cm_db_type,
+              db_host => $cm_db_host,
+              db_port => $cm_db_port,
+              db_user => $cm_db_masteruser,
+              db_pass => $cm_db_masterpass,
+              require => Class['mysql::server'],
+            }
           } else {
             fail("Only supports mysql for local database. Under construction.")
           }
         } else {
           class { 'mysql::client': }
           mysql_user{ "$cm_db_user@%": ensure => present, password_hash => mysql_password("$cm_db_pass"), require => Class['::mysql::client'], }
+          mysql_grant{ "$cm_db_user@%/$cm_db_name.*": user => "$cm_db_user@%", table => "$cm_db_name.*", privileges => ['ALL'], require => Class["mysql_user[$cm_db_user@%]"], }
+          class { '::cloudera':
+            cm_server_host => $cm_api_host,
+            install_cmserver => true,
+            use_parcels => true,
+            db_type => $cm_db_type,
+            db_host => $cm_db_host,
+            db_port => $cm_db_port,
+            db_user => $cm_db_masteruser,
+            db_pass => $cm_db_masterpass,
+            require => Class["mysql::grant[$cm_db_user@%/$cm_db_name.*]"],
+          }
         }
-        mysql_grant{ "$cm_db_user@%/$cm_db_name.*": user => "$cm_db_user@%", table => "$cm_db_name.*", privileges => ['ALL'], require => Class["mysql_user[$cm_db_user@%]"], }
         mysql::db { "$actmon_db_name": user => "$actmon_db_user", password => "$actmon_db_pass", host => "$cm_db_host", grant => ['ALL'], }
-        class { '::cloudera':
-          cm_server_host => $cm_api_host,
-          install_cmserver => true,
-          use_parcels => true,
-          db_type => $cm_db_type,
-          db_host => $cm_db_host,
-          db_port => $cm_db_port,
-          db_user => $cm_db_masteruser,
-          db_pass => $cm_db_masterpass,
-          require => Class['mysql::server'],
-        }
       }
     } else {
       if $cm_db_embedded == 1 {

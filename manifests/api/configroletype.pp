@@ -34,7 +34,7 @@ define cloudera::api::configroletype (
   $cm_api_host       = $cloudera::params::cm_api_host,
   $cm_api_port       = $cloudera::params::cm_api_port,
   $cm_api_user       = $cloudera::params::cm_api_user,
-  $cm_api_password   = $cloudera::params::cm_api_password,
+  $cm_api_pass   = $cloudera::params::cm_api_pass,
   $cdh_cluster_service = $cloudera::params::cdh_cluster_service,
   $cdh_service_roletype = $cloudera::params::cdh_service_roletype,
   $items_config = $cloudera::params::items_config
@@ -47,7 +47,7 @@ define cloudera::api::configroletype (
   }
 
   exec { "add config for service $cdh_cluster_service role type $cdh_service_roletype":
-    command => "/usr/bin/curl -H 'Content-Type: application/json' -u $cm_api_user:$cm_api_password -XPUT \"http://$cm_api_host:$cm_api_port/api/v1/clusters/$cdh_cluster_name/services/$cdh_cluster_service/config\" -d @$cdh_cluster_service-$cdh_service_roletype-config.json > $cdh_metadata_dir/$cdh_cluster_service-$cdh_service_roletype-config.json.output",
+    command => "/usr/bin/curl -H 'Content-Type: application/json' -u $cm_api_user:$cm_api_pass -XPUT \"http://$cm_api_host:$cm_api_port/api/v1/clusters/$cdh_cluster_name/services/$cdh_cluster_service/config\" -d @$cdh_cluster_service-$cdh_service_roletype-config.json > $cdh_metadata_dir/$cdh_cluster_service-$cdh_service_roletype-config.json.output",
     cwd     => "/tmp",
     creates => "$cdh_metadata_dir/$cdh_cluster_service-$cdh_service_roletype-config.json.output",
     require => File["$cdh_cluster_service-$cdh_service_roletype-config.json"],

@@ -12,7 +12,7 @@ class cloudera::roles::server (
   $cm_api_host       = $cloudera::params::cm_api_host,
   $cm_api_port       = $cloudera::params::cm_api_port,
   $cm_api_user       = $cloudera::params::cm_api_user,
-  $cm_api_password   = $cloudera::params::cm_api_password,
+  $cm_api_pass   = $cloudera::params::cm_api_pass,
   $cm_db_remote      = $cloudera::params::cm_db_remote,
   $cm_db_type        = $cloudera::params::cm_db_type,
   $cm_db_host        = $cloudera::params::cm_db_host,

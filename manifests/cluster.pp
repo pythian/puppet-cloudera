@@ -129,7 +129,7 @@ class cloudera::cluster (
     }
     exec {'waiting until CM API get ready':
       command => "/usr/bin/curl -u $cm_api_user:$cm_api_password -XGET \"http://$cm_api_host:$cm_api_port/api/v13\"",
-      tries => 30,
+      tries => 45,
       try_sleep => 60,
       require => Class['::cloudera'],
     }

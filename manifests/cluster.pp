@@ -90,7 +90,7 @@ class cloudera::cluster (
             db_port => $cm_db_port,
             db_user => $cm_db_masteruser,
             db_pass => $cm_db_masterpass,
-            require => Class["mysql::grant[$cm_db_user@%/$cm_db_name.*]"],
+            require => Class["mysql_grant[$cm_db_user@%/$cm_db_name.*]"],
           }
         }
         mysql::db { "$actmon_db_name": user => "$actmon_db_user", password => "$actmon_db_pass", host => "$cm_db_host", grant => ['ALL'], }

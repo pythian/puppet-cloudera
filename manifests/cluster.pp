@@ -80,6 +80,7 @@ class cloudera::cluster (
           }
         } else {
           class { 'mysql::client': }
+          mysql_database{ "actmon_db_name": require => Class['::mysql::client'], }
           mysql_user{ "$cm_db_user@%": ensure => present, password_hash => mysql_password("$cm_db_pass"), require => Class['::mysql::client'], }
           mysql_grant{ "$cm_db_user@%/$cm_db_name.*": user => "$cm_db_user@%", table => "$cm_db_name.*", privileges => ['ALL'], require => Class["mysql_user[$cm_db_user@%]"], }
           class { '::cloudera':
@@ -93,7 +94,6 @@ class cloudera::cluster (
             db_pass => $cm_db_masterpass,
             require => Class["mysql_grant[$cm_db_user@%/$cm_db_name.*]"],
           }
-          mysql_database{ "actmon_db_name": }
         }
       }
     } else {

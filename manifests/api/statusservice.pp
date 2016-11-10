@@ -33,12 +33,12 @@ define cloudera::api::statusservice (
   $cm_api_host       = $cloudera::params::cm_api_host,
   $cm_api_port       = $cloudera::params::cm_api_port,
   $cm_api_user       = $cloudera::params::cm_api_user,
-  $cm_api_password   = $cloudera::params::cm_api_password,
+  $cm_api_pass   = $cloudera::params::cm_api_pass,
 ) {
 
   exec { "wait-for-service-$cdh_service_name-get-$cdh_service_status":
-    command => "/usr/bin/curl -u $cm_api_user:$cm_api_password -XGET \"http://$cm_api_host:$cm_api_port/api/v13/clusters/$cdh_cluster_name/services/$cdh_service_name\" | grep $cdh_service_status",
-    tries => 30,
+    command => "/usr/bin/curl -u $cm_api_user:$cm_api_pass -XGET \"http://$cm_api_host:$cm_api_port/api/v13/clusters/$cdh_cluster_name/services/$cdh_service_name\" | grep $cdh_service_status",
+    tries => 45,
     try_sleep => 60,
   }
 

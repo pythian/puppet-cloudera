@@ -32,11 +32,11 @@ define cloudera::api::deployconfig (
   $cm_api_host       = $cloudera::params::cm_api_host,
   $cm_api_port       = $cloudera::params::cm_api_port,
   $cm_api_user       = $cloudera::params::cm_api_user,
-  $cm_api_password   = $cloudera::params::cm_api_password
+  $cm_api_pass   = $cloudera::params::cm_api_pass
 ) {
 
   exec { "deploy config service $cdh_role_name":
-    command => "/usr/bin/curl -H 'Content-Type: application/json' -u $cm_api_user:$cm_api_password -XPOST \"http://$cm_api_host:$cm_api_port/api/v13/clusters/$cdh_cluster_name/commands/deployClientConfig\" -d '{ }'",
+    command => "/usr/bin/curl -H 'Content-Type: application/json' -u $cm_api_user:$cm_api_pass -XPOST \"http://$cm_api_host:$cm_api_port/api/v13/clusters/$cdh_cluster_name/commands/deployClientConfig\" -d '{ }'",
     cwd     => "/tmp",
     tries   => 3,
     try_sleep => 60

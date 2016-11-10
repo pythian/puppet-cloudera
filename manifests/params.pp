@@ -343,9 +343,9 @@ class cloudera::params {
     default => $::cloudera_cm_api_user,
   }
 
-  $cm_api_password = $::cloudera_cm_api_password ? {
+  $cm_api_pass = $::cloudera_cm_api_pass ? {
     undef => 'admin',
-    default => $::cloudera_cm_api_password,
+    default => $::cloudera_cm_api_pass,
   }
 
   $cm_db_remote = $::cloudera_cm_db_remote ? {

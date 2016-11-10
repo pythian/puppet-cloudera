@@ -11,7 +11,7 @@ class cloudera::roles::servicenode_1 (
   $cm_api_host       = $cloudera::params::cm_api_host,
   $cm_api_port       = $cloudera::params::cm_api_port,
   $cm_api_user       = $cloudera::params::cm_api_user,
-  $cm_api_password   = $cloudera::params::cm_api_password,
+  $cm_api_pass   = $cloudera::params::cm_api_pass,
 ) inherits cloudera::params {
   if $cdh_cluster_multi_az == 0 {
     if $cdh_cluster_ha == 0 {
@@ -38,22 +38,31 @@ class cloudera::roles::servicenode_1 (
         cdh_cluster_name => $cdh_cluster_name,
         cdh_service_roles => ['NAMENODE','JOURNALNODE'],
         cm_api_host => $cm_api_host,
+        cm_api_port => $cm_api_port,
+        cm_api_user => $cm_api_user,
+        cm_api_pass => $cm_api_pass,
         require => Mount['/nfs/namenode'],
       }
       cloudera::api::addrole{'HBASE':
         cdh_cluster_name => $cdh_cluster_name,
         cdh_service_roles => ['MASTER'],
         cm_api_host => $cm_api_host,
+        cm_api_port => $cm_api_port,
+        cm_api_user => $cm_api_user,
+        cm_api_pass => $cm_api_pass,
         require => Mount['/nfs/namenode'],
       }
       cloudera::api::addrole{'ZOOKEEPER':
         cdh_cluster_name => $cdh_cluster_name,
         cdh_service_roles => ['SERVER'],
         cm_api_host => $cm_api_host,
+        cm_api_port => $cm_api_port,
+        cm_api_user => $cm_api_user,
+        cm_api_pass => $cm_api_pass,
         require => Mount['/nfs/namenode'],
       }
       exec { 'wait-parcels':
-        command => "/usr/bin/curl -u $cm_api_user:$cm_api_password -XGET \"http://$cm_api_host:$cm_api_port/api/v13/clusters/$cdh_cluster_name/parcels/products/CDH/versions/$cdh_cluster_parcels_release\" | grep ACTIVATED",
+        command => "/usr/bin/curl -u $cm_api_user:$cm_api_pass -XGET \"http://$cm_api_host:$cm_api_port/api/v13/clusters/$cdh_cluster_name/parcels/products/CDH/versions/$cdh_cluster_parcels_release\" | grep ACTIVATED",
         tries => 15,
         try_sleep => 60,
         require => Class['cloudera::api::addrole[ZOOKEEPER]'],
@@ -66,6 +75,9 @@ class cloudera::roles::servicenode_1 (
       class{'::cloudera::api::zookeeperinit':
         cdh_cluster_name => $cdh_cluster_name,
         cm_api_host => $cm_api_host,
+        cm_api_port => $cm_api_port,
+        cm_api_user => $cm_api_user,
+        cm_api_pass => $cm_api_pass,
         require => Exec['wait-parcels'],
       }
     } else {
@@ -73,24 +85,36 @@ class cloudera::roles::servicenode_1 (
         cdh_cluster_name => $cdh_cluster_name,
         cdh_service_roles => ['NAMENODE','JOURNALNODE'],
         cm_api_host => $cm_api_host,
+        cm_api_port => $cm_api_port,
+        cm_api_user => $cm_api_user,
+        cm_api_pass => $cm_api_pass,
       }
       cloudera::api::addrole{'HBASE':
         cdh_cluster_name => $cdh_cluster_name,
         cdh_service_roles => ['MASTER'],
         cm_api_host => $cm_api_host,
+        cm_api_port => $cm_api_port,
+        cm_api_user => $cm_api_user,
+        cm_api_pass => $cm_api_pass,
       }
       cloudera::api::addrole{'MAPREDUCE':
         cdh_cluster_name => $cdh_cluster_name,
         cdh_service_roles => ['JOBTRACKER','FAILOVERCONTROLLER'],
         cm_api_host => $cm_api_host,
+        cm_api_port => $cm_api_port,
+        cm_api_user => $cm_api_user,
+        cm_api_pass => $cm_api_pass,
       }
       cloudera::api::addrole{'ZOOKEEPER':
         cdh_cluster_name => $cdh_cluster_name,
         cdh_service_roles => ['SERVER'],
         cm_api_host => $cm_api_host,
+        cm_api_port => $cm_api_port,
+        cm_api_user => $cm_api_user,
+        cm_api_pass => $cm_api_pass,
       }
       exec { 'wait-parcels':
-        command => "/usr/bin/curl -u $cm_api_user:$cm_api_password -XGET \"http://$cm_api_host:$cm_api_port/api/v13/clusters/$cdh_cluster_name/parcels/products/CDH/versions/$cdh_cluster_parcels_release\" | grep ACTIVATED",
+        command => "/usr/bin/curl -u $cm_api_user:$cm_api_pass -XGET \"http://$cm_api_host:$cm_api_port/api/v13/clusters/$cdh_cluster_name/parcels/products/CDH/versions/$cdh_cluster_parcels_release\" | grep ACTIVATED",
         tries => 15,
         try_sleep => 60,
         require => Class['cloudera::api::addrole[ZOOKEEPER]'],
@@ -98,6 +122,9 @@ class cloudera::roles::servicenode_1 (
       class{'::cloudera::api::zookeeperinit':
         cdh_cluster_name => $cdh_cluster_name,
         cm_api_host => $cm_api_host,
+        cm_api_port => $cm_api_port,
+        cm_api_user => $cm_api_user,
+        cm_api_pass => $cm_api_pass,
         require => Exec['wait-parcels'],
       }
     }
@@ -126,28 +153,40 @@ class cloudera::roles::servicenode_1 (
         cdh_cluster_name => $cdh_cluster_name,
         cdh_service_roles => ['NAMENODE','JOURNALNODE'],
         cm_api_host => $cm_api_host,
+        cm_api_port => $cm_api_port,
+        cm_api_user => $cm_api_user,
+        cm_api_pass => $cm_api_pass,
         require => Mount['/nfs/namenode'],
       }
       cloudera::api::addrole{'MAPREDUCE':
         cdh_cluster_name => $cdh_cluster_name,
         cdh_service_roles => ['JOBTRACKER','FAILOVERCONTROLLER'],
         cm_api_host => $cm_api_host,
+        cm_api_port => $cm_api_port,
+        cm_api_user => $cm_api_user,
+        cm_api_pass => $cm_api_pass,
         require => Mount['/nfs/namenode'],
       }
       cloudera::api::addrole{'HBASE':
         cdh_cluster_name => $cdh_cluster_name,
         cdh_service_roles => ['MASTER'],
         cm_api_host => $cm_api_host,
+        cm_api_port => $cm_api_port,
+        cm_api_user => $cm_api_user,
+        cm_api_pass => $cm_api_pass,
         require => Mount['/nfs/namenode'],
       }
       cloudera::api::addrole{'ZOOKEEPER':
         cdh_cluster_name => $cdh_cluster_name,
         cdh_service_roles => ['SERVER'],
         cm_api_host => $cm_api_host,
+        cm_api_port => $cm_api_port,
+        cm_api_user => $cm_api_user,
+        cm_api_pass => $cm_api_pass,
         require => Mount['/nfs/namenode'],
       }
       exec { 'wait-parcels':
-        command => "/usr/bin/curl -u $cm_api_user:$cm_api_password -XGET \"http://$cm_api_host:$cm_api_port/api/v13/clusters/$cdh_cluster_name/parcels/products/CDH/versions/$cdh_cluster_parcels_release\" | grep ACTIVATED",
+        command => "/usr/bin/curl -u $cm_api_user:$cm_api_pass -XGET \"http://$cm_api_host:$cm_api_port/api/v13/clusters/$cdh_cluster_name/parcels/products/CDH/versions/$cdh_cluster_parcels_release\" | grep ACTIVATED",
         tries => 15,
         try_sleep => 60,
         require => Class['cloudera::api::addrole[ZOOKEEPER]'],
@@ -160,6 +199,9 @@ class cloudera::roles::servicenode_1 (
       class{'::cloudera::api::zookeeperinit':
         cdh_cluster_name => $cdh_cluster_name,
         cm_api_host => $cm_api_host,
+        cm_api_port => $cm_api_port,
+        cm_api_user => $cm_api_user,
+        cm_api_pass => $cm_api_pass,
         require => Exec['wait-parcels'],
       }
     } else {
@@ -167,24 +209,36 @@ class cloudera::roles::servicenode_1 (
         cdh_cluster_name => $cdh_cluster_name,
         cdh_service_roles => ['NAMENODE','JOURNALNODE'],
         cm_api_host => $cm_api_host,
+        cm_api_port => $cm_api_port,
+        cm_api_user => $cm_api_user,
+        cm_api_pass => $cm_api_pass,
       }
       cloudera::api::addrole{'HBASE':
         cdh_cluster_name => $cdh_cluster_name,
         cdh_service_roles => ['MASTER'],
         cm_api_host => $cm_api_host,
+        cm_api_port => $cm_api_port,
+        cm_api_user => $cm_api_user,
+        cm_api_pass => $cm_api_pass,
       }
       cloudera::api::addrole{'MAPREDUCE':
         cdh_cluster_name => $cdh_cluster_name,
         cdh_service_roles => ['JOBTRACKER','FAILOVERCONTROLLER'],
         cm_api_host => $cm_api_host,
+        cm_api_port => $cm_api_port,
+        cm_api_user => $cm_api_user,
+        cm_api_pass => $cm_api_pass,
       }
       cloudera::api::addrole{'ZOOKEEPER':
         cdh_cluster_name => $cdh_cluster_name,
         cdh_service_roles => ['SERVER'],
         cm_api_host => $cm_api_host,
+        cm_api_port => $cm_api_port,
+        cm_api_user => $cm_api_user,
+        cm_api_pass => $cm_api_pass,
       }
       exec { 'wait-parcels':
-        command => "/usr/bin/curl -u $cm_api_user:$cm_api_password -XGET \"http://$cm_api_host:$cm_api_port/api/v13/clusters/$cdh_cluster_name/parcels/products/CDH/versions/$cdh_cluster_parcels_release\" | grep ACTIVATED",
+        command => "/usr/bin/curl -u $cm_api_user:$cm_api_pass -XGET \"http://$cm_api_host:$cm_api_port/api/v13/clusters/$cdh_cluster_name/parcels/products/CDH/versions/$cdh_cluster_parcels_release\" | grep ACTIVATED",
         tries => 15,
         try_sleep => 60,
         require => Class['cloudera::api::addrole[ZOOKEEPER]'],
@@ -192,6 +246,9 @@ class cloudera::roles::servicenode_1 (
       class{'::cloudera::api::zookeeperinit':
         cdh_cluster_name => $cdh_cluster_name,
         cm_api_host => $cm_api_host,
+        cm_api_port => $cm_api_port,
+        cm_api_user => $cm_api_user,
+        cm_api_pass => $cm_api_pass,
         require => Exec['wait-parcels'],
       }
     }

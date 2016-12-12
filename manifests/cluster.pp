@@ -28,10 +28,8 @@ class cloudera::cluster (
   $cm_db_masterpass  = $cloudera::params::cm_db_masterpass,
   $actmon_db_pass    = $cloudera::params::actmon_db_pass,
 ) inherits cloudera::params {
-  class facts() {
-    file { '/etc/facts':
-      content => template("${module_name}/factlist.erb")
-    }
+  file { '/etc/facts':
+    content => template("${module_name}/factlist.erb")
   }
   class { '::cloudera::api': }
   if $cdh_cluster_role == 'CMSERVER' {

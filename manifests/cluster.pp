@@ -128,7 +128,8 @@ class cloudera::cluster (
           }
         } else {
           class { 'mysql::client': }
-          mysql_database{ "$actmon_db_name": require => Class['::mysql::client'], ensure => present }
+          #mysql_database{ "$actmon_db_name": require => Class['::mysql::client'], ensure => present }
+          mysql::db { "$actmon_db_name": user => "$actmon_db_user", password => "$actmon_db_pass", host => "$cm_db_host", grant => ['ALL'], }
           # this cannot be inside of puppet due to puppetlabs module limitation. it returns exit code non zero because mysqld is not installed. It seems a bug because we can manage pre installed DBs
           #mysql_user{ "$cm_db_user@%": ensure => present, password_hash => mysql_password("$cm_db_pass"), require => Class['::mysql::client'], }
           #mysql_grant{ "$cm_db_user@%/$cm_db_name.*": user => "$cm_db_user@%", table => "$cm_db_name.*", privileges => ['ALL'] }

@@ -143,7 +143,7 @@ class cloudera::cluster (
       require => Exec['waiting until CM API get ready'],
     }
     exec { 'configure-activity-monitor-db':
-      command => "/bin/bash /home/ubuntu/scripts/configure_activity_monitor_db.sh > $cdh_metadata_dir/activity_monitor_db_config.json.output",
+      command => "/bin/bash ./scripts/configure_activity_monitor_db.sh > $cdh_metadata_dir/activity_monitor_db_config.json.output",
       creates => "$cdh_metadata_dir/activity_monitor_db_config.json.output",
       require => Class['::cloudera::api::managementservice'],
     }
@@ -218,7 +218,7 @@ class cloudera::cluster (
     if $cdh_cluster_ha > 0 {
       exec {'enable-hdfs-ha':
         #it will never run without default credentials, but need to be update to be consistent. Currently, user and pass are not passed to enable_hdfs_ha script
-        command => "/bin/bash /home/ubuntu/scripts/enable_hdfs_ha.sh $cm_api_host $cdh_cluster_name",
+        command => "/bin/bash ./scripts/enable_hdfs_ha.sh $cm_api_host $cdh_cluster_name",
         require => Class['cloudera::api::statusservice[YARN]'],
       }
     }

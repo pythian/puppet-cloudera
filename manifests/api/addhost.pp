@@ -40,7 +40,7 @@ class cloudera::api::addhost (
   }
 
   exec {'update-host-rack':
-    command => "/bin/bash /home/ubuntu/scripts/configure_rack.sh $cm_api_host $cm_api_port $cm_api_user $cm_api_pass > $cdh_metadata_dir/host-rack.json.output",
+    command => "/bin/bash ./scripts/configure_rack.sh $cm_api_host $cm_api_port $cm_api_user $cm_api_pass > $cdh_metadata_dir/host-rack.json.output",
     creates => "$cdh_metadata_dir/host-rack.json.output",
     require => [Exec['wait-host-registration'],File['host.json']],
   }

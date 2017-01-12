@@ -37,7 +37,7 @@ class cloudera::roles::datanode (
     require => [Class['cloudera::api::addrole[HDFS]'],Class['cloudera::api::addrole[HBASE]'],Class['cloudera::api::addrole[YARN]'],],
   }
   exec {'configure-hdfs-disks':
-    command => "/bin/bash /home/ubuntu/scripts/hdfs_disks.sh $cm_api_host $cm_api_port $cm_api_user $cm_api_pass $cdh_cluster_name > $cdh_metadata_dir/disks",
+    command => "/bin/bash ./scripts/hdfs_disks.sh $cm_api_host $cm_api_port $cm_api_user $cm_api_pass $cdh_cluster_name > $cdh_metadata_dir/disks",
     creates => "$cdh_metadata_dir/disks",
     require => Exec['wait-parcels'],
   }

@@ -5,4 +5,6 @@ class cloudera::api (
   file { "$cdh_metadata_dir":
     ensure => 'directory'
   }
+
+  package { "jq": ensure => latest }
 }

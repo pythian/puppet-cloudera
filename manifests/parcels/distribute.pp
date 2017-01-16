@@ -19,7 +19,7 @@ define cloudera::parcels::distribute (
   }
 
   exec { "wait-distribution-complete-$parcels_product":
-    command => "/usr/bin/curl -u $cm_api_user:$cm_api_pass -XGET \"http://$cm_api_host:$cm_api_port/api/v13/clusters/$cdh_cluster_name/parcels/products/$parcels_product/versions/$parcels_version\" | jq '. | select(.state.totalProgress == 100) | select(.stage == "DISTRIBUTED")'",
+    command => "/usr/bin/curl -u $cm_api_user:$cm_api_pass -XGET \"http://$cm_api_host:$cm_api_port/api/v13/clusters/$cdh_cluster_name/parcels/products/$parcels_product/versions/$parcels_version\" | grep DISTRIBUTED",
     tries => 10,
     try_sleep => 180,
     refreshonly => true,

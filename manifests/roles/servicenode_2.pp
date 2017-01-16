@@ -54,7 +54,7 @@ class cloudera::roles::servicenode_2 (
       }
       exec { 'wait-parcels':
         command => "/usr/bin/curl -u $cm_api_user:$cm_api_pass -XGET \"http://$cm_api_host:$cm_api_port/api/v13/clusters/$cdh_cluster_name/parcels/products/CDH/versions/$cdh_cluster_parcels_release\" | grep ACTIVATED",
-        tries => 15,
+        tries => 25,
         try_sleep => 60,
         require => Class['cloudera::api::addrole[ZOOKEEPER]'],
       }
@@ -91,7 +91,7 @@ class cloudera::roles::servicenode_2 (
       }
       exec { 'wait-parcels':
         command => "/usr/bin/curl -u $cm_api_user:$cm_api_pass -XGET \"http://$cm_api_host:$cm_api_port/api/v13/clusters/$cdh_cluster_name/parcels/products/CDH/versions/$cdh_cluster_parcels_release\" | grep ACTIVATED",
-        tries => 15,
+        tries => 25,
         try_sleep => 60,
         require => Class['cloudera::api::addrole[ZOOKEEPER]'],
       }
@@ -142,7 +142,7 @@ class cloudera::roles::servicenode_2 (
       }
       exec { 'wait-parcels':
         command => "/usr/bin/curl -u $cm_api_user:$cm_api_pass -XGET \"http://$cm_api_host:$cm_api_port/api/v13/clusters/$cdh_cluster_name/parcels/products/CDH/versions/$cdh_cluster_parcels_release\" | grep ACTIVATED",
-        tries => 15,
+        tries => 25,
         try_sleep => 60,
         require => Class['cloudera::api::addrole[ZOOKEEPER]'],
       }
@@ -179,7 +179,7 @@ class cloudera::roles::servicenode_2 (
       }
       exec { 'wait-parcels':
         command => "/usr/bin/curl -u $cm_api_user:$cm_api_pass -XGET \"http://$cm_api_host:$cm_api_port/api/v13/clusters/$cdh_cluster_name/parcels/products/CDH/versions/$cdh_cluster_parcels_release\" | grep ACTIVATED",
-        tries => 15,
+        tries => 25,
         try_sleep => 60,
         require => Class['cloudera::api::addrole[ZOOKEEPER]'],
       }

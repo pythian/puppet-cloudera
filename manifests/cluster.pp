@@ -53,8 +53,6 @@ class cloudera::cluster (
           cm_server_host => $cm_api_host,
           install_cmserver => true,
           use_parcels => true,
-          install_java => false,
-          install_jce => false,
           require => Service['nfs-kernel-server'],
         }
       } else {
@@ -67,8 +65,6 @@ class cloudera::cluster (
               cm_server_host => $cm_api_host,
               install_cmserver => true,
               use_parcels => true,
-              install_java => false,
-              install_jce => false,
               db_type => $cm_db_type,
               db_host => $cm_db_host,
               db_port => $cm_db_port,
@@ -85,8 +81,6 @@ class cloudera::cluster (
             cm_server_host => $cm_api_host,
             install_cmserver => true,
             use_parcels => true,
-            install_java => false,
-            install_jce => false,
             db_type => $cm_db_type,
             db_host => $cm_db_host,
             db_port => $cm_db_port,
@@ -101,8 +95,6 @@ class cloudera::cluster (
           cm_server_host => $cm_api_host,
           install_cmserver => true,
           use_parcels => true,
-          install_java => false,
-          install_jce => false,
         }
       } else {
         if $cm_db_rds == 0 {
@@ -114,8 +106,6 @@ class cloudera::cluster (
               cm_server_host => $cm_api_host,
               install_cmserver => true,
               use_parcels => true,
-              install_java => false,
-              install_jce => false,
               db_type => $cm_db_type,
               db_host => $cm_db_host,
               db_port => $cm_db_port,
@@ -132,8 +122,6 @@ class cloudera::cluster (
             cm_server_host => $cm_api_host,
             install_cmserver => true,
             use_parcels => true,
-            install_java => false,
-            install_jce => false,
             db_type => $cm_db_type,
             db_host => $cm_db_host,
             db_port => $cm_db_port,
@@ -244,8 +232,6 @@ class cloudera::cluster (
       cm_server_host => $cm_api_host,
       install_cmserver => false,
       use_parcels => true,
-      install_java => false,
-      install_jce => false,
       require => Exec['waiting for cluster creation'],
     }
     class { '::cloudera::api::addhost':

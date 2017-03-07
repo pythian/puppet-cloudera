@@ -184,4 +184,20 @@ class cloudera::roles::server (
     cm_api_host => $cm_api_host,
     require => Class['cloudera::api::addservice[HDFS]'],
   }
+  cloudera::api::configrolegroup{'MAPREDUCE-GATEWAY-BASE':
+    cdh_cluster_name => $cdh_cluster_name,
+    cdh_cluster_service => 'MAPREDUCE',
+    cdh_service_rolegroup => 'MAPREDUCE-GATEWAY-BASE',
+    items_config => [{ "name" => "mapred_reduce_tasks", "value" => "3" },{ "name" => "mapred_submit_replication", "value" => "2" } ],
+    cm_api_host => $cm_api_host,
+    require => Class['cloudera::api::addservice[MAPREDUCE]'],
+  }
+  cloudera::api::configrolegroup{'MAPREDUCE-JOBTRACKER-BASE':
+    cdh_cluster_name => $cdh_cluster_name,
+    cdh_cluster_service => 'MAPREDUCE',
+    cdh_service_rolegroup => 'MAPREDUCE-JOBTRACKER-BASE',
+    items_config => [{ "name" => "mapred_job_tracker_handler_count", "value" => "25" }],
+    cm_api_host => $cm_api_host,
+    require => Class['cloudera::api::addservice[MAPREDUCE]'],
+  }
 }

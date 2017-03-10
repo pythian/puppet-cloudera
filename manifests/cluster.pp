@@ -53,6 +53,8 @@ class cloudera::cluster (
           cm_server_host => $cm_api_host,
           install_cmserver => true,
           use_parcels => true,
+          install_java => false,
+          install_jce => false,
           require => Service['nfs-kernel-server'],
         }
       } else {
@@ -65,6 +67,8 @@ class cloudera::cluster (
               cm_server_host => $cm_api_host,
               install_cmserver => true,
               use_parcels => true,
+              install_java => false,
+              install_jce => false,
               db_type => $cm_db_type,
               db_host => $cm_db_host,
               db_port => $cm_db_port,
@@ -81,6 +85,8 @@ class cloudera::cluster (
             cm_server_host => $cm_api_host,
             install_cmserver => true,
             use_parcels => true,
+            install_java => false,
+            install_jce => false,
             db_type => $cm_db_type,
             db_host => $cm_db_host,
             db_port => $cm_db_port,
@@ -95,6 +101,8 @@ class cloudera::cluster (
           cm_server_host => $cm_api_host,
           install_cmserver => true,
           use_parcels => true,
+          install_java => false,
+          install_jce => false,
         }
       } else {
         if $cm_db_rds == 0 {
@@ -106,6 +114,8 @@ class cloudera::cluster (
               cm_server_host => $cm_api_host,
               install_cmserver => true,
               use_parcels => true,
+              install_java => false,
+              install_jce => false,
               db_type => $cm_db_type,
               db_host => $cm_db_host,
               db_port => $cm_db_port,
@@ -122,6 +132,8 @@ class cloudera::cluster (
             cm_server_host => $cm_api_host,
             install_cmserver => true,
             use_parcels => true,
+            install_java => false,
+            install_jce => false,
             db_type => $cm_db_type,
             db_host => $cm_db_host,
             db_port => $cm_db_port,
@@ -204,6 +216,9 @@ class cloudera::cluster (
       parcels_version => $cdh_cluster_parcels_release,
       require => Class['cloudera::parcels::distribute[CDH]'],
     }
+    exec {'wait-cluster-get-stable':
+      command => "/bin/sleep 180",
+    }
     class {'::cloudera::api::start':
       cdh_cluster_name => $cdh_cluster_name,
       cm_api_host => $cm_api_host,
@@ -236,6 +251,8 @@ class cloudera::cluster (
       cm_server_host => $cm_api_host,
       install_cmserver => false,
       use_parcels => true,
+      install_java => false,
+      install_jce => false,
       require => Exec['waiting for cluster creation'],
     }
     class { '::cloudera::api::addhost':

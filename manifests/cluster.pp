@@ -184,6 +184,10 @@ class cloudera::cluster (
       parcels_version => $cdh_cluster_parcels_release,
       require => [Class["cloudera::parcels::config[CDH-$cdh_cluster_major_release]"],Exec['configure-activity-monitor-db']],
     }
+    exec {'waiting until all hosts register to CM API':
+      command => "/bin/bash /home/ubuntu/scripts/wait_for_host_registration.sh",
+      require => Class['::cloudera::parcels::download[CDH]'],
+    }
     ::cloudera::parcels::distribute{'CDH':
       cdh_cluster_name => $cdh_cluster_name,
       cm_api_host => $cm_api_host,

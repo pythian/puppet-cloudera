@@ -212,6 +212,9 @@ class cloudera::cluster (
       parcels_version => $cdh_cluster_parcels_release,
       require => Class['cloudera::parcels::distribute[CDH]'],
     }
+    exec {'wait-cluster-get-stable':
+      command => "/bin/sleep 180",
+    }
     class {'::cloudera::api::start':
       cdh_cluster_name => $cdh_cluster_name,
       cm_api_host => $cm_api_host,

@@ -125,7 +125,7 @@ class cloudera::roles::server (
     cdh_cluster_name => $cdh_cluster_name,
     cdh_cluster_service => 'MAPREDUCE',
     cdh_service_rolegroup => 'MAPREDUCE-JOBTRACKER-BASE',
-    items_config => [{ "name" => "jobtracker_mapred_local_dir_list", "value" => "/dfs/mapreduce/jobtracker"},{ "name" => "mapred_reduce_tasks", "value" => "3" },{ "name" => "mapred_submit_replication", "value" => "2" },{ "name" => "mapred_job_tracker_handler_count", "value" => "25" }],
+    items_config => [{ "name" => "jobtracker_mapred_local_dir_list", "value" => "/dfs/mapreduce/jobtracker"},{ "name" => "mapred_reduce_tasks", "value" => "3" },{ "name" => "mapred_submit_replication", "value" => "2" }],
     cm_api_host => $cm_api_host,
     cm_api_port => $cm_api_port,
     cm_api_user => $cm_api_user,
@@ -183,5 +183,13 @@ class cloudera::roles::server (
     items_config => [{ "name" => "dfs_client_use_trash", "value" => "true" }],
     cm_api_host => $cm_api_host,
     require => Class['cloudera::api::addservice[HDFS]'],
+  }
+  cloudera::api::configrolegroup{'MAPREDUCE-JOBTRACKER-BASE':
+    cdh_cluster_name => $cdh_cluster_name,
+    cdh_cluster_service => 'MAPREDUCE',
+    cdh_service_rolegroup => 'MAPREDUCE-JOBTRACKER-BASE',
+    items_config => [{ "name" => "mapred_job_tracker_handler_count", "value" => "25" }],
+    cm_api_host => $cm_api_host,
+    require => Class['cloudera::api::addservice[MAPREDUCE]'],
   }
 }

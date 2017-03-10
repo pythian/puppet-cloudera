@@ -186,7 +186,7 @@ class cloudera::cluster (
     }
     exec {'waiting until all hosts register to CM API':
       command => "/bin/bash /home/ubuntu/scripts/wait_for_host_registration.sh",
-      require => Class['::cloudera::parcels::download[CDH]'],
+      require => Class['cloudera::parcels::download[CDH]'],
     }
     ::cloudera::parcels::distribute{'CDH':
       cdh_cluster_name => $cdh_cluster_name,

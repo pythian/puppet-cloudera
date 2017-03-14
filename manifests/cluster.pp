@@ -53,6 +53,8 @@ class cloudera::cluster (
           cm_server_host => $cm_api_host,
           install_cmserver => true,
           use_parcels => true,
+          install_java => false,
+          install_jce => false,
           require => Service['nfs-kernel-server'],
         }
       } else {
@@ -65,6 +67,8 @@ class cloudera::cluster (
               cm_server_host => $cm_api_host,
               install_cmserver => true,
               use_parcels => true,
+              install_java => false,
+              install_jce => false,
               db_type => $cm_db_type,
               db_host => $cm_db_host,
               db_port => $cm_db_port,
@@ -81,6 +85,8 @@ class cloudera::cluster (
             cm_server_host => $cm_api_host,
             install_cmserver => true,
             use_parcels => true,
+            install_java => false,
+            install_jce => false,
             db_type => $cm_db_type,
             db_host => $cm_db_host,
             db_port => $cm_db_port,
@@ -95,6 +101,8 @@ class cloudera::cluster (
           cm_server_host => $cm_api_host,
           install_cmserver => true,
           use_parcels => true,
+          install_java => false,
+          install_jce => false,
         }
       } else {
         if $cm_db_rds == 0 {
@@ -106,6 +114,8 @@ class cloudera::cluster (
               cm_server_host => $cm_api_host,
               install_cmserver => true,
               use_parcels => true,
+              install_java => false,
+              install_jce => false,
               db_type => $cm_db_type,
               db_host => $cm_db_host,
               db_port => $cm_db_port,
@@ -122,6 +132,8 @@ class cloudera::cluster (
             cm_server_host => $cm_api_host,
             install_cmserver => true,
             use_parcels => true,
+            install_java => false,
+            install_jce => false,
             db_type => $cm_db_type,
             db_host => $cm_db_host,
             db_port => $cm_db_port,
@@ -184,6 +196,10 @@ class cloudera::cluster (
       parcels_version => $cdh_cluster_parcels_release,
       require => [Class["cloudera::parcels::config[CDH-$cdh_cluster_major_release]"],Exec['configure-activity-monitor-db']],
     }
+    exec {'waiting until all hosts register to CM API':
+      command => "/bin/bash /home/ubuntu/scripts/wait_nodes_registration.sh",
+      require => Class['cloudera::parcels::download[CDH]'],
+    }
     ::cloudera::parcels::distribute{'CDH':
       cdh_cluster_name => $cdh_cluster_name,
       cm_api_host => $cm_api_host,
@@ -200,28 +216,6 @@ class cloudera::cluster (
       parcels_version => $cdh_cluster_parcels_release,
       require => Class['cloudera::parcels::distribute[CDH]'],
     }
-    class {'::cloudera::api::start':
-      cdh_cluster_name => $cdh_cluster_name,
-      cm_api_host => $cm_api_host,
-      cm_api_user => $cm_api_user,
-      cm_api_pass => $cm_api_pass,
-      require => Class['cloudera::parcels::activate[CDH]'],
-    }
-    cloudera::api::statusservice{'MAPREDUCE':
-      cdh_cluster_name => $cdh_cluster_name,
-      cdh_service_status => 'STARTED',
-      cm_api_host => $cm_api_host,
-      cm_api_user => $cm_api_user,
-      cm_api_pass => $cm_api_pass,
-      require => [Class['::cloudera::api::start'],Class['cloudera::parcels::activate[CDH]']],
-    }
-    if $cdh_cluster_ha > 0 {
-      exec {'enable-hdfs-ha':
-        #it will never run without default credentials, but need to be update to be consistent. Currently, user and pass are not passed to enable_hdfs_ha script
-        command => "/bin/bash /home/ubuntu/scripts/enable_hdfs_ha.sh $cm_api_host $cdh_cluster_name",
-        require => Class['cloudera::api::statusservice[MAPREDUCE]'],
-      }
-    }
   } else {
     exec {'waiting for cluster creation':
       command => "/usr/bin/curl -u $cm_api_user:$cm_api_pass -XGET \"http://$cm_api_host:$cm_api_port/api/v13/clusters/$cdh_cluster_name\" | grep version",
@@ -232,6 +226,8 @@ class cloudera::cluster (
       cm_server_host => $cm_api_host,
       install_cmserver => false,
       use_parcels => true,
+      install_java => false,
+      install_jce => false,
       require => Exec['waiting for cluster creation'],
     }
     class { '::cloudera::api::addhost':

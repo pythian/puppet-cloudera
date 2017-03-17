@@ -18,7 +18,8 @@ class cloudera::roles::server (
   $cm_db_host        = $cloudera::params::cm_db_host,
   $cm_db_port        = $cloudera::params::cm_db_port,
   $cm_db_user        = $cloudera::params::cm_db_user,
-  $cm_db_pass        = $cloudera::params::cm_db_pass
+  $cm_db_pass        = $cloudera::params::cm_db_pass,
+  $datanodes_count   = $cloudera::params::datanodes_count,
 ) inherits cloudera::params {
   if $cdh_cluster_ha == 0 {
     cloudera::api::addservice{'ZOOKEEPER':
@@ -147,7 +148,7 @@ class cloudera::roles::server (
     cdh_cluster_name => $cdh_cluster_name,
     cdh_cluster_service => 'MAPREDUCE',
     cdh_service_rolegroup => 'MAPREDUCE-GATEWAY-BASE',
-    items_config => [{ "name" => "mapred_reduce_tasks", "value" => "3" },{ "name" => "mapred_submit_replication", "value" => "3" }],
+    items_config => [{ "name" => "mapred_reduce_tasks", "value" => "$datanodes_count" },{ "name" => "mapred_submit_replication", "value" => "$datanodes_count" }],
     cm_api_host => $cm_api_host,
     cm_api_port => $cm_api_port,
     cm_api_user => $cm_api_user,

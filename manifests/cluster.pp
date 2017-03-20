@@ -28,6 +28,7 @@ class cloudera::cluster (
   $cm_db_pass                  = $cloudera::params::cm_db_pass,
   $cm_db_masterpass            = $cloudera::params::cm_db_masterpass,
   $actmon_db_pass              = $cloudera::params::actmon_db_pass,
+  $datanodes_count             = $cloudera::params::datanodes_count,
 ) inherits cloudera::params {
   class { '::cloudera::api': }
   if $cdh_cluster_role == 'CMSERVER' {
@@ -179,6 +180,7 @@ class cloudera::cluster (
       cm_api_host => $cm_api_host,
       cm_api_user => $cm_api_user,
       cm_api_pass => $cm_api_pass,
+      datanodes_count => $datanodes_count,
       require => Class['::cloudera::api::addhost'],
     }
     ::cloudera::parcels::config{"CDH-$cdh_cluster_major_release":

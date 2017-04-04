@@ -181,7 +181,7 @@ class cloudera::roles::server (
     cdh_cluster_name => $cdh_cluster_name,
     cdh_cluster_service => 'HDFS',
     cdh_service_rolegroup => 'HDFS-NAMENODE-BASE',
-    items_config => [{ "name" => "dfs_name_dir_list", "value" => "/nfs/namenode,/dfs/namenode" }],
+    items_config => [{ "name" => "dfs_name_dir_list", "value" => "/nfs/namenode,/dfs/namenode" }, { "name" => "namenode_java_heapsize", "value" => "8589934592" }],
     cm_api_host => $cm_api_host,
     cm_api_port => $cm_api_port,
     cm_api_user => $cm_api_user,

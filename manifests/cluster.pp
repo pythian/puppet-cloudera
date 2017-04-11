@@ -61,8 +61,7 @@ class cloudera::cluster (
       } else {
         if $cm_db_rds == 0 {
           if $cm_db_type == "mysql" {
-            class { 'mysql::server': root_password => $cm_db_masterpass, remove_default_accounts => true, require => Service['nfs-kernel-server'], }
-            mysql_user{ "$cm_db_user@%": ensure => present, password_hash => mysql_password("$cm_db_pass"), require => Class['::mysql::server'], }
+            mysql_user{ "$cm_db_user@%": ensure => present, password_hash => mysql_password("$cm_db_pass"), require => Service['nfs-kernel-server'], }
             mysql_grant{ "$cm_db_user@%/$cm_db_name.*": user => "$cm_db_user@%", table => "$cm_db_name.*", privileges => ['ALL'], require => Class["mysql_user[$cm_db_user@%]"], }
             class { '::cloudera':
               cm_server_host => $cm_api_host,
@@ -108,8 +107,7 @@ class cloudera::cluster (
       } else {
         if $cm_db_rds == 0 {
           if $cm_db_type == "mysql" {
-            class { 'mysql::server': root_password => $cm_db_masterpass, remove_default_accounts => true, }
-            mysql_user{ "$cm_db_user@%": ensure => present, password_hash => mysql_password("$cm_db_pass"), require => Class['::mysql::server'], }
+            mysql_user{ "$cm_db_user@%": ensure => present, password_hash => mysql_password("$cm_db_pass"), }
             mysql_grant{ "$cm_db_user@%/$cm_db_name.*": user => "$cm_db_user@%", table => "$cm_db_name.*", privileges => ['ALL'], require => Class["mysql_user[$cm_db_user@%]"], }
             class { '::cloudera':
               cm_server_host => $cm_api_host,

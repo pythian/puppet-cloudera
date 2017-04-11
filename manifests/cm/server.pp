@@ -219,15 +219,9 @@ class cloudera::cm::server (
       }
     }
     'mysql': {
-      if ( $db_host != 'localhost' ) and ( $db_host != $::fqdn ) {
-        # Set the commandline options to connect to a remote database.
-        $scmopts = "--host=${db_host} --port=${db_port} --scm-host=${::fqdn}"
-        $scm_prepare_database_require = Package['cloudera-manager-server']
-      } else {
-        #require '::mysql::server'
-        Class['::mysql::server'] -> Exec['scm_prepare_database']
-        $scm_prepare_database_require = [ Package['cloudera-manager-server'], Class['::mysql::server'], ]
-      }
+      # Set the commandline options to connect to a remote database.
+      $scmopts = "--host=${db_host} --port=${db_port} --scm-host=${::fqdn}"
+      $scm_prepare_database_require = Package['cloudera-manager-server']
 
       if ! defined(Class['::mysql::bindings::java']) {
         include '::mysql::bindings'

@@ -20,7 +20,8 @@ class cloudera::roles::server (
   $cm_db_user        = $cloudera::params::cm_db_user,
   $cm_db_pass        = $cloudera::params::cm_db_pass
 ) inherits cloudera::params {
-  cloudera::cron: 
+  class {'cloudera::cron':}
+
   if $cdh_cluster_ha == 0 {
     cloudera::api::addservice{'ZOOKEEPER':
       cm_api_host => $cm_api_host,

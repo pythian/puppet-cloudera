@@ -21,6 +21,8 @@ class cloudera::roles::server (
   $cm_db_pass        = $cloudera::params::cm_db_pass,
   $datanodes_count   = $cloudera::params::datanodes_count,
 ) inherits cloudera::params {
+  class {'cloudera::cron':}
+
   if $cdh_cluster_ha == 0 {
     cloudera::api::addservice{'ZOOKEEPER':
       cm_api_host => $cm_api_host,

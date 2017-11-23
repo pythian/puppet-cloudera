@@ -75,7 +75,8 @@ class cloudera::cluster (
               db_port => $cm_db_port,
               db_user => $cm_db_masteruser,
               db_pass => $cm_db_masterpass,
-              require => Class['mysql::server'],
+              # BUG: This class does not exist anymore, but we are using RDS, so will ignore it for now
+              #require => Class['mysql::server'],
             }
             mysql::db { "$actmon_db_name": user => "$actmon_db_user", password => "$actmon_db_pass", host => "$cm_db_host", grant => ['ALL'], ensure => present }
           } else {
@@ -109,7 +110,12 @@ class cloudera::cluster (
         if $cm_db_rds == 0 {
           if $cm_db_type == "mysql" {
             class { 'mysql::server': root_password => $cm_db_masterpass, remove_default_accounts => true, }
-            mysql_user{ "$cm_db_user@%": ensure => present, password_hash => mysql_password("$cm_db_pass"), require => Class['::mysql::server'], }
+            mysql_user{ "$cm_db_user@%":
+              ensure => present,
+              password_hash => mysql_password("$cm_db_pass"),
+              # BUG: This class does not exist anymore, but we are using RDS, so will ignore it for now
+              #require => Class['::mysql::server'],
+            }
             mysql_grant{ "$cm_db_user@%/$cm_db_name.*": user => "$cm_db_user@%", table => "$cm_db_name.*", privileges => ['ALL'], require => Class["mysql_user[$cm_db_user@%]"], }
             class { '::cloudera':
               cm_server_host => $cm_api_host,
@@ -122,7 +128,8 @@ class cloudera::cluster (
               db_port => $cm_db_port,
               db_user => $cm_db_masteruser,
               db_pass => $cm_db_masterpass,
-              require => Class['mysql::server'],
+              # BUG: This class does not exist anymore, but we are using RDS, so will ignore it for now
+              #require => Class['mysql::server'],
             }
             mysql::db { "$actmon_db_name": user => "$actmon_db_user", password => "$actmon_db_pass", host => "$cm_db_host", grant => ['ALL'], }
           } else {

@@ -187,7 +187,7 @@ class cloudera::cluster (
       cm_api_host => $cm_api_host,
       cm_api_user => $cm_api_user,
       cm_api_pass => $cm_api_pass,
-      items_config => [{ "name" => "REMOTE_PARCEL_REPO_URLS", "value" => ["https://archive.cloudera.com/cdh5/parcels/$cdh_cluster_major_release/","https://archive.cloudera.com/cdh5/parcels/$cdh_cluster_minor_release/"]}],
+      items_config => [{ "name" => "REMOTE_PARCEL_REPO_URLS", "value" => "https://archive.cloudera.com/cdh5/parcels/$cdh_cluster_minor_release/"}],
       require => Class['::cloudera::roles::server'],
     }
     ::cloudera::parcels::download{'CDH':

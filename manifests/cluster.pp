@@ -183,11 +183,11 @@ class cloudera::cluster (
       datanodes_count => $datanodes_count,
       require => Class['::cloudera::api::addhost'],
     }
-    ::cloudera::parcels::config{"CDH-$cdh_cluster_major_release":
+    ::cloudera::parcels::config{"CDH-$cdh_cluster_release":
       cm_api_host => $cm_api_host,
       cm_api_user => $cm_api_user,
       cm_api_pass => $cm_api_pass,
-      items_config => [{ "name" => "REMOTE_PARCEL_REPO_URLS", "value" => "https://archive.cloudera.com/cdh5/parcels/$cdh_cluster_major_release/"}],
+      items_config => [{ "name" => "REMOTE_PARCEL_REPO_URLS", "value" => ["https://archive.cloudera.com/cdh5/parcels/$cdh_cluster_major_release/","https://archive.cloudera.com/cdh5/parcels/$cdh_cluster_minor_release/"]}],
       require => Class['::cloudera::roles::server'],
     }
     ::cloudera::parcels::download{'CDH':
@@ -196,7 +196,7 @@ class cloudera::cluster (
       cm_api_user => $cm_api_user,
       cm_api_pass => $cm_api_pass,
       parcels_version => $cdh_cluster_parcels_release,
-      require => [Class["cloudera::parcels::config[CDH-$cdh_cluster_major_release]"],Exec['configure-activity-monitor-db']],
+      require => [Class["cloudera::parcels::config[CDH-$cdh_cluster_release]"],Exec['configure-activity-monitor-db']],
     }
     exec {'waiting until all hosts register to CM API':
       command => "/bin/bash /home/ubuntu/scripts/wait_nodes_registration.sh",

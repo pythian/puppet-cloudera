@@ -1,0 +1,8 @@
+# mysqld_version.rb
+
+Facter.add('mysqld_version') do
+  setcode do
+    Facter::Util::Resolution.exec('echo 5.7.16')
+  end
+end
+

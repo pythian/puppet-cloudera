@@ -94,6 +94,7 @@ class cloudera::cluster (
             db_user => $cm_db_masteruser,
             db_pass => $cm_db_masterpass,
           }
+          mysql::db { "$actmon_db_name": user => "$actmon_db_user", password => "$actmon_db_pass", host => "$cm_db_host", grant => ['ALL'], ensure => present }
         }
       }
     } else {
@@ -141,6 +142,7 @@ class cloudera::cluster (
             db_user => $cm_db_masteruser,
             db_pass => $cm_db_masterpass,
           }
+          mysql::db { "$actmon_db_name": user => "$actmon_db_user", password => "$actmon_db_pass", host => "$cm_db_host", grant => ['ALL'], ensure => present }
         }
       }
     }
